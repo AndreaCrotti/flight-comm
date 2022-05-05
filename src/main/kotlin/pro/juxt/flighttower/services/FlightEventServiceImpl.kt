@@ -1,6 +1,6 @@
 package pro.juxt.flighttower.services
 
-import pro.juxt.flighttower.FlightEventRepository
+import pro.juxt.flighttower.repository.FlightEventRepository
 import pro.juxt.flighttower.models.FlightEvent
 
 class FlightEventServiceImpl(private val flightEventRepository: FlightEventRepository) : FlightEventService {

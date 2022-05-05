@@ -1,4 +1,4 @@
-package pro.juxt.flighttower
+package pro.juxt.flighttower.repository
 
 import org.springframework.data.mongodb.repository.MongoRepository
 import pro.juxt.flighttower.models.FlightEvent
