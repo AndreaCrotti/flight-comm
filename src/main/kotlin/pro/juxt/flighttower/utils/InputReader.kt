@@ -16,5 +16,18 @@ class InputReader(val flightEventService: FlightEventService) {
         flightEventService.recordNewEvent(event)
     }
 
+    fun setInputMode() {
+        when (readln()) {
+            "1" -> readEvent()
+            "2" -> TODO("handle update" )
+            "3" -> TODO("handle delete" )
+            "4" -> TODO("handle get info" )
+            else -> {
+                println("input not recognised.")
+                setInputMode()
+            }
+        }
+    }
+
 
 }

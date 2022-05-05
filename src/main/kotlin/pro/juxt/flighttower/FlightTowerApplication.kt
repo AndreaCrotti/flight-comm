@@ -4,13 +4,15 @@ import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import pro.juxt.flighttower.utils.InputReader
+import pro.juxt.flighttower.utils.PrintHelper
 
 @SpringBootApplication
-class FlightTowerApplication(val inputReader: InputReader) : CommandLineRunner {
+class FlightTowerApplication(val inputReader: InputReader, val printHelper: PrintHelper) : CommandLineRunner {
 
 	override fun run(vararg args: String?) {
-		println("input event: ")
-		inputReader.readEvent()
+		printHelper.printWelcome()
+		printHelper.printModeSelection()
+		inputReader.setInputMode()
 	}
 
 }
