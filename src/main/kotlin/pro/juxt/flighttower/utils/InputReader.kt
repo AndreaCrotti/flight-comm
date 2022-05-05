@@ -1,15 +1,15 @@
 package pro.juxt.flighttower.utils
 
 import org.springframework.stereotype.Component
+import pro.juxt.flighttower.services.FlightEventService
 
 @Component
-object InputReader {
+class InputReader(val flightEventService: FlightEventService) {
 
     fun readEvent() {
         val input = readln()
         println(input)
     }
-
 
 
 }

@@ -1,22 +1,27 @@
 package pro.juxt.flighttower.utils
 
+import io.mockk.mockk
+import io.mockk.verify
 import org.junit.jupiter.api.Test
+import pro.juxt.flighttower.fixtures.Fixtures.eventString
+import pro.juxt.flighttower.fixtures.Fixtures.stubEvent
+import pro.juxt.flighttower.services.FlightEventService
 import java.io.ByteArrayInputStream
 
 import java.io.InputStream
-import java.io.PrintStream
 
 internal class InputReaderTest {
 
-    private val eventString = "F551 747 PARIS LONDON Re-Fuel 2021-03-29T10:00:00 345"
-    private val inputReader = InputReader
+    private val mockEventService = mockk<FlightEventService>()
+    private val inputReader = InputReader(mockEventService)
 
     @Test
-    fun test_input() {
+    fun readEvent_converts_input_to_flight_event() {
         val bytes = eventString.toByteArray()
         val input: InputStream = ByteArrayInputStream(bytes)
         System.setIn(input)
         inputReader.readEvent()
+        verify { mockEventService.recordNewEvent(stubEvent()) }
     }
 
 }
