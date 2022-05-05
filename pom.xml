@@ -14,8 +14,13 @@
 	<name>flight-tower</name>
 	<description>Flight Control Tower App</description>
 	<properties>
+
 		<java.version>17</java.version>
 		<kotlin.version>1.6.21</kotlin.version>
+
+		<!--	Dependencies	-->
+		<mockk.version>1.12.3</mockk.version>
+
 	</properties>
 	<dependencies>
 		<dependency>
@@ -41,6 +46,13 @@
 			<artifactId>de.flapdoodle.embed.mongo</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>io.mockk</groupId>
+			<artifactId>mockk</artifactId>
+			<version>${mockk.version}</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>

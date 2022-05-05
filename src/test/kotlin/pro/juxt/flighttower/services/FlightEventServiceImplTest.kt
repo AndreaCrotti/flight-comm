@@ -1,13 +1,27 @@
 package pro.juxt.flighttower.services
 
-import org.junit.jupiter.api.Assertions.*
+import io.mockk.mockk
+import io.mockk.verify
 import org.junit.jupiter.api.Test
+import pro.juxt.flighttower.FlightEventRepository
+import pro.juxt.flighttower.models.FlightEvent
+import java.time.LocalDateTime
 
 internal class FlightEventServiceImplTest {
 
+    private val mockRepository = mockk<FlightEventRepository>()
+    private val stubFlightEvent = stubEvent()
+
     @Test
     fun calls_repository() {
+        val flightEventService = FlightEventServiceImpl(mockRepository)
+        flightEventService.recordNewEvent(stubFlightEvent)
+        verify(exactly = 1) { mockRepository.save(stubFlightEvent) }
+    }
 
+    private fun stubEvent() : FlightEvent {
+        return FlightEvent("F123", "747", "Paris", "Berlin", "Landing",
+            LocalDateTime.of(2022, 5, 4, 13, 30), 150)
     }
 
 }
