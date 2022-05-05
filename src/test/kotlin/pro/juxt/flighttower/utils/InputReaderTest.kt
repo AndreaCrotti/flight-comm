@@ -1,5 +1,6 @@
 package pro.juxt.flighttower.utils
 
+import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Test
@@ -20,6 +21,7 @@ internal class InputReaderTest {
         val bytes = eventString.toByteArray()
         val input: InputStream = ByteArrayInputStream(bytes)
         System.setIn(input)
+        every { mockEventService.recordNewEvent(stubEvent()) } returns Unit
         inputReader.readEvent()
         verify { mockEventService.recordNewEvent(stubEvent()) }
     }
