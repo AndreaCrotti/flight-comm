@@ -13,11 +13,19 @@ internal class FlightEventServiceImplTest {
     private val stubFlightEvent = stubEvent()
 
     @Test
-    fun calls_repository() {
+    fun record_new_event_saves_to_repository() {
         val flightEventService = FlightEventServiceImpl(mockRepository)
         every { mockRepository.save(stubFlightEvent) } returns stubFlightEvent
         flightEventService.recordNewEvent(stubFlightEvent)
         verify(exactly = 1) { mockRepository.save(stubFlightEvent) }
+    }
+
+    @Test
+    fun update_event_updates_repository() {
+        val flightEventService = FlightEventServiceImpl(mockRepository)
+        every { mockRepository.update(stubFlightEvent) } returns true
+        flightEventService.updateEvent(stubFlightEvent)
+        verify(exactly = 1) { mockRepository.update(stubFlightEvent) }
     }
 
 }
