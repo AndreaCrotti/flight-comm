@@ -34,11 +34,19 @@ internal class InputReaderTest {
     }
 
     @Test
-    fun read_event_converts_input_to_flight_event() {
+    fun read_event_passes_flight_event_to_service() {
         stdin(eventString)
         every { mockEventService.recordNewEvent(stubEvent()) } returns Unit
         inputReader.readEvent()
         verify(exactly = 1) { mockEventService.recordNewEvent(stubEvent()) }
+    }
+
+    @Test
+    fun update_event_passes_flight_event_to_service() {
+        stdin(eventString)
+        every { mockEventService.updateEvent(stubEvent()) } returns Unit
+        inputReader.updateEvent()
+        verify(exactly = 1) { mockEventService.updateEvent(stubEvent()) }
     }
 
     private fun stdin(string: String) {

@@ -11,4 +11,8 @@ class FlightEventServiceImpl(private val flightEventRepository: FlightEventRepos
         flightEventRepository.save(flightEvent)
     }
 
+    override fun updateEvent(flightEvent: FlightEvent) {
+        TODO("Not yet implemented")
+    }
+
 }

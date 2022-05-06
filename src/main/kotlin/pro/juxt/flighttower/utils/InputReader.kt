@@ -22,15 +22,19 @@ class InputReader(val flightEventService: FlightEventService) {
     }
 
     fun readEvent() {
-        val input = readln()
-        val segments = input.split(" ")
-        val event = FlightEvent(segments[0], segments[1], segments[2], segments[3],
-            segments[4], LocalDateTime.parse(segments[5]), segments[6].toInt())
-        flightEventService.recordNewEvent(event)
+        val flightEvent = toEvent(readln())
+        flightEventService.recordNewEvent(flightEvent)
     }
 
     fun updateEvent() {
-        TODO("Not yet implemented")
+        val updateEvent = toEvent(readln())
+        flightEventService.updateEvent(updateEvent)
+    }
+
+    private fun toEvent(input: String) : FlightEvent{
+        val segments = input.split(" ")
+        return FlightEvent(segments[0], segments[1], segments[2], segments[3],
+            segments[4], LocalDateTime.parse(segments[5]), segments[6].toInt())
     }
 
 

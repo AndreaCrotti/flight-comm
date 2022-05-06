@@ -6,4 +6,6 @@ interface FlightEventService {
 
     fun recordNewEvent(flightEvent: FlightEvent)
 
+    fun updateEvent(flightEvent: FlightEvent)
+
 }
