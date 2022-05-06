@@ -18,19 +18,27 @@ internal class InputReaderTest {
     private val inputReader = spyk<InputReader>(InputReader(mockEventService))
 
     @Test
+    fun set_input_mode_1_to_update_event() {
+        stdin("1")
+        every { inputReader.readEvent() } returns Unit
+        inputReader.setInputMode()
+        verify(exactly = 1) { inputReader.readEvent() }
+    }
+
+    @Test
+    fun set_input_mode_2_to_read_new_event() {
+        stdin("2")
+        every { inputReader.updateEvent() } returns Unit
+        inputReader.setInputMode()
+        verify(exactly = 1) { inputReader.updateEvent() }
+    }
+
+    @Test
     fun read_event_converts_input_to_flight_event() {
         stdin(eventString)
         every { mockEventService.recordNewEvent(stubEvent()) } returns Unit
         inputReader.readEvent()
         verify(exactly = 1) { mockEventService.recordNewEvent(stubEvent()) }
-    }
-
-    @Test
-    fun set_input_mode_calls_read_event() {
-        stdin("1")
-        every { inputReader.readEvent() } returns Unit
-        inputReader.setInputMode()
-        verify(exactly = 1) { inputReader.readEvent() }
     }
 
     private fun stdin(string: String) {

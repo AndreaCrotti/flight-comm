@@ -8,6 +8,19 @@ import java.time.LocalDateTime
 @Component
 class InputReader(val flightEventService: FlightEventService) {
 
+    fun setInputMode() {
+        when (readln()) {
+            "1" -> readEvent()
+            "2" -> updateEvent()
+            "3" -> TODO("handle delete" )
+            "4" -> TODO("handle get info" )
+            else -> {
+                println("input not recognised.")
+                setInputMode()
+            }
+        }
+    }
+
     fun readEvent() {
         val input = readln()
         val segments = input.split(" ")
@@ -16,17 +29,8 @@ class InputReader(val flightEventService: FlightEventService) {
         flightEventService.recordNewEvent(event)
     }
 
-    fun setInputMode() {
-        when (readln()) {
-            "1" -> readEvent()
-            "2" -> TODO("handle update" )
-            "3" -> TODO("handle delete" )
-            "4" -> TODO("handle get info" )
-            else -> {
-                println("input not recognised.")
-                setInputMode()
-            }
-        }
+    fun updateEvent() {
+        TODO("Not yet implemented")
     }
 
 
