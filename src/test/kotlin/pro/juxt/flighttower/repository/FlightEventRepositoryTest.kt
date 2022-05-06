@@ -32,4 +32,17 @@ class FlightEventRepositoryTest @Autowired constructor (
         assertEquals(stubFlightEvent, result.first())
     }
 
+    @Test
+    fun repository_updates_existing_flight_event() {
+        flightEventRepository.save(stubFlightEvent)
+
+        val updatedEvent = stubEvent(fuelDelta = 300)
+        flightEventRepository.update(stubFlightEvent)
+
+        val result : List<FlightEvent> = flightEventRepository.findAll()
+
+        assertEquals(1, result.size)
+        assertEquals(updatedEvent, result.first())
+    }
+
 }
