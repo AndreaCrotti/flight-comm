@@ -17,7 +17,8 @@ class FlightEventServiceImpl(private val flightEventRepository: FlightEventRepos
     }
 
     override fun deleteEvent(deleteEvent: DeleteEvent) {
-        TODO("Not yet implemented")
+        flightEventRepository.deleteByPlaneIdAndTimestamp(
+            deleteEvent.planeId, deleteEvent.timestamp)
     }
 
 }
