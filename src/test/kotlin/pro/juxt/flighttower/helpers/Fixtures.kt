@@ -14,11 +14,11 @@ object Fixtures {
         origin: String = "PARIS",
         destination: String = "BERLIN",
         eventType: String = "Land",
-        dateTime: LocalDateTime = stubDateTime(),
+        timestamp: LocalDateTime = stubDateTime(),
         fuelDelta: Int = 150
     ) : FlightEvent {
 
-        return FlightEvent(planeId, model, origin, destination, eventType, dateTime, fuelDelta)
+        return FlightEvent(planeId, model, origin, destination, eventType, timestamp, fuelDelta)
 
     }
 

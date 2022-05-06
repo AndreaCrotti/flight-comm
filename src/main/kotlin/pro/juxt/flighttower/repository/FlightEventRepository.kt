@@ -8,6 +8,6 @@ import java.time.LocalDateTime
 @Repository
 interface FlightEventRepository : MongoRepository<FlightEvent, String> , CustomRepository {
 
-    fun deleteByPlaneIdAndTimestamp(planeId : String, timestamp: LocalDateTime) : Boolean
+    fun deleteByPlaneIdAndTimestamp(planeId : String, timestamp: LocalDateTime) : Long
 
 }

@@ -33,7 +33,7 @@ internal class FlightEventServiceImplTest {
     fun delete_event_calls_repository() {
         val flightEventService = FlightEventServiceImpl(mockRepository)
         every { mockRepository.deleteByPlaneIdAndTimestamp(
-            stubDeleteEvent.planeId, stubDeleteEvent.timestamp) } returns true
+            stubDeleteEvent.planeId, stubDeleteEvent.timestamp) } returns 0
         flightEventService.deleteEvent(stubDeleteEvent)
     }
 
