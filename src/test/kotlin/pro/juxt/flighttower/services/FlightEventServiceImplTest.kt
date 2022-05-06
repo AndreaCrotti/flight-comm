@@ -23,9 +23,9 @@ internal class FlightEventServiceImplTest {
     @Test
     fun update_event_updates_repository() {
         val flightEventService = FlightEventServiceImpl(mockRepository)
-        every { mockRepository.update(stubFlightEvent) } returns true
+        every { mockRepository.upsert(stubFlightEvent) } returns true
         flightEventService.updateEvent(stubFlightEvent)
-        verify(exactly = 1) { mockRepository.update(stubFlightEvent) }
+        verify(exactly = 1) { mockRepository.upsert(stubFlightEvent) }
     }
 
 }

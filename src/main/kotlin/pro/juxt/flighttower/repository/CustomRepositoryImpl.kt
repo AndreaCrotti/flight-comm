@@ -19,7 +19,7 @@ private const val FUEL_DELTA = "fuelDelta"
 
 class CustomRepositoryImpl(private val mongoTemplate: MongoTemplate) : CustomRepository {
 
-    override fun update(flightEvent: FlightEvent) : Boolean {
+    override fun upsert(flightEvent: FlightEvent) : Boolean {
 
         val criteria: Criteria = Criteria.where(PLANE_ID).`is`(flightEvent.planeId)
             .and(TIMESTAMP).`is`(flightEvent.timestamp)

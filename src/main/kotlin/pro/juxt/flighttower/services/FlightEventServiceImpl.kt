@@ -12,7 +12,7 @@ class FlightEventServiceImpl(private val flightEventRepository: FlightEventRepos
     }
 
     override fun updateEvent(flightEvent: FlightEvent) {
-        flightEventRepository.update(flightEvent)
+        flightEventRepository.upsert(flightEvent)
     }
 
 }
