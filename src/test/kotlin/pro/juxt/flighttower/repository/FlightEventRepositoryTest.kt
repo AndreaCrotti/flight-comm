@@ -2,25 +2,22 @@ package pro.juxt.flighttower.repository
 
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import pro.juxt.flighttower.fixtures.Fixtures.stubEvent
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest
+import org.springframework.context.annotation.Import
+import pro.juxt.flighttower.helpers.Fixtures.stubEvent
+import pro.juxt.flighttower.helpers.MockBeanConfiguration
 import pro.juxt.flighttower.models.FlightEvent
 
-@SpringBootTest
+
+@DataMongoTest
+@Import(MockBeanConfiguration::class)
 class FlightEventRepositoryTest @Autowired constructor (
-    private val flightEventRepository : FlightEventRepository
+    private val flightEventRepository : FlightEventRepository,
 ){
 
     private val stubFlightEvent = stubEvent()
-
-    // TODO remove once initial run-in removed
-    @BeforeEach
-    fun setup() {
-        flightEventRepository.deleteAll()
-    }
 
     @AfterEach
     fun clearData() {

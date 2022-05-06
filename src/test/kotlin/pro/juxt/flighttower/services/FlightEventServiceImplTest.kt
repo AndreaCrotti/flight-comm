@@ -4,7 +4,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Test
-import pro.juxt.flighttower.fixtures.Fixtures.stubEvent
+import pro.juxt.flighttower.helpers.Fixtures.stubEvent
 import pro.juxt.flighttower.repository.FlightEventRepository
 
 internal class FlightEventServiceImplTest {

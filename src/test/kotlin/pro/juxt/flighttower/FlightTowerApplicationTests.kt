@@ -1,13 +1,16 @@
 package pro.juxt.flighttower
 
-import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.context.annotation.Import
+import pro.juxt.flighttower.helpers.MockBeanConfiguration
+
 
 @SpringBootTest
+@Import(MockBeanConfiguration::class)
 class FlightTowerApplicationTests {
 
-	@Test
-	fun contextLoads() {
-	}
+//	@Test
+//	fun contextLoads() {
+//	}
 
 }

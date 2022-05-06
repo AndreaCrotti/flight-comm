@@ -1,4 +1,4 @@
-package pro.juxt.flighttower.fixtures
+package pro.juxt.flighttower.helpers
 
 import pro.juxt.flighttower.models.FlightEvent
 import java.time.LocalDateTime
