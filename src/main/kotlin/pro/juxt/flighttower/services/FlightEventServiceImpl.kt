@@ -1,6 +1,7 @@
 package pro.juxt.flighttower.services
 
 import org.springframework.stereotype.Service
+import pro.juxt.flighttower.models.DeleteEvent
 import pro.juxt.flighttower.repository.FlightEventRepository
 import pro.juxt.flighttower.models.FlightEvent
 
@@ -13,6 +14,10 @@ class FlightEventServiceImpl(private val flightEventRepository: FlightEventRepos
 
     override fun updateEvent(flightEvent: FlightEvent) {
         flightEventRepository.upsert(flightEvent)
+    }
+
+    override fun deleteEvent(deleteEvent: DeleteEvent) {
+        TODO("Not yet implemented")
     }
 
 }

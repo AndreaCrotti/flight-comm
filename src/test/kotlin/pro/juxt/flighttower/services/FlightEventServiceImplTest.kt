@@ -4,6 +4,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Test
+import pro.juxt.flighttower.helpers.Fixtures.stubDeleteEvent
 import pro.juxt.flighttower.helpers.Fixtures.stubEvent
 import pro.juxt.flighttower.repository.FlightEventRepository
 
@@ -26,6 +27,14 @@ internal class FlightEventServiceImplTest {
         every { mockRepository.upsert(stubFlightEvent) } returns true
         flightEventService.updateEvent(stubFlightEvent)
         verify(exactly = 1) { mockRepository.upsert(stubFlightEvent) }
+    }
+
+    @Test
+    fun delete_event_calls_repository() {
+        val flightEventService = FlightEventServiceImpl(mockRepository)
+        every { mockRepository.deleteByPlaneIdAndTimestamp(
+            stubDeleteEvent.planeId, stubDeleteEvent.timestamp) } returns true
+        flightEventService.deleteEvent(stubDeleteEvent)
     }
 
 }
