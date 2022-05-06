@@ -2,6 +2,7 @@ package pro.juxt.flighttower.repository
 
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest
@@ -37,10 +38,10 @@ class FlightEventRepositoryTest @Autowired constructor (
         flightEventRepository.save(stubFlightEvent)
 
         val updatedEvent = stubEvent(fuelDelta = 300)
-        flightEventRepository.update(stubFlightEvent)
-
+        val acknowledgement = flightEventRepository.update(updatedEvent)
         val result : List<FlightEvent> = flightEventRepository.findAll()
 
+        assertTrue(acknowledgement)
         assertEquals(1, result.size)
         assertEquals(updatedEvent, result.first())
     }
