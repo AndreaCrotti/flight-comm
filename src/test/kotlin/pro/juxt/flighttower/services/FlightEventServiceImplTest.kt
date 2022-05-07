@@ -40,9 +40,9 @@ internal class FlightEventServiceImplTest {
     @Test
     fun get_status_calls_repository() {
         val timestamp = stubDateTime(5, 14, 30)
-        every { mockRepository.findAllByTimestampBefore(timestamp) } returns listOf(stubFlightEvent)
+        every { mockRepository.findAllByTimestampLessThanEqual(timestamp) } returns listOf(stubFlightEvent)
         flightEventService.getStatusAt(StatusRequest(timestamp))
-        verify(exactly = 1) { mockRepository.findAllByTimestampBefore(timestamp) }
+        verify(exactly = 1) { mockRepository.findAllByTimestampLessThanEqual(timestamp) }
     }
 
 }

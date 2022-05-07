@@ -23,7 +23,7 @@ class FlightEventServiceImpl(private val flightEventRepository: FlightEventRepos
     }
 
     override fun getStatusAt(statusRequest: StatusRequest) {
-        flightEventRepository.findAllByTimestampBefore(statusRequest.timestamp)
+        flightEventRepository.findAllByTimestampLessThanEqual(statusRequest.timestamp)
     }
 
 }

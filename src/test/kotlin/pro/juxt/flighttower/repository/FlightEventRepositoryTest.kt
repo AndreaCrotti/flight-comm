@@ -7,9 +7,16 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest
 import org.springframework.context.annotation.Import
+import pro.juxt.flighttower.helpers.Fixtures.stubDataSet
 import pro.juxt.flighttower.helpers.Fixtures.stubDateTime
 import pro.juxt.flighttower.helpers.Fixtures.stubDeleteEvent
 import pro.juxt.flighttower.helpers.Fixtures.stubEvent
+import pro.juxt.flighttower.helpers.Fixtures.stubEvent1
+import pro.juxt.flighttower.helpers.Fixtures.stubEvent2
+import pro.juxt.flighttower.helpers.Fixtures.stubEvent4
+import pro.juxt.flighttower.helpers.Fixtures.stubEvent5
+import pro.juxt.flighttower.helpers.Fixtures.stubEvent7
+import pro.juxt.flighttower.helpers.Fixtures.stubEvent8
 import pro.juxt.flighttower.helpers.MockBeanConfiguration
 import pro.juxt.flighttower.models.FlightEvent
 
@@ -84,6 +91,29 @@ class FlightEventRepositoryTest @Autowired constructor (
 
         assertEquals(1, deleteCount)
         assertEquals(4, database.size)
+    }
+
+    @Test
+    fun find_all_before_timestamp_returns_all_events_before_timestamp() {
+        saveBunchOfStuff()
+        val statusTime = stubDateTime(hour = 15, minute = 0)
+        val result = flightEventRepository.findAllByTimestampLessThanEqual(statusTime)
+        assertEquals(9, result.size)
+        assertTrue(result.containsAll(stubDataSet))
+    }
+
+    @Test
+    fun find_all_before_timestamp_does_not_return_events_after_timestamp() {
+        saveBunchOfStuff()
+        val statusTime = stubDateTime(hour = 12, minute = 0)
+        val result = flightEventRepository.findAllByTimestampLessThanEqual(statusTime)
+        val expected = listOf(stubEvent1, stubEvent2, stubEvent4, stubEvent5, stubEvent7, stubEvent8)
+        assertEquals(6, result.size)
+        assertTrue(result.containsAll(expected))
+    }
+
+    private fun saveBunchOfStuff() {
+        stubDataSet.forEach { flightEventRepository.save(it) }
     }
 
 }

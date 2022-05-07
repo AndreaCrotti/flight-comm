@@ -10,6 +10,6 @@ interface FlightEventRepository : MongoRepository<FlightEvent, String> , CustomR
 
     fun deleteByPlaneIdAndTimestamp(planeId : String, timestamp: LocalDateTime) : Long
 
-    fun findAllByTimestampBefore(timestamp: LocalDateTime) : List<FlightEvent>
+    fun findAllByTimestampLessThanEqual(timestamp: LocalDateTime) : List<FlightEvent>
 
 }
