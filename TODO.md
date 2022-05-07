@@ -34,3 +34,4 @@
 - exit
 - print input format for each mode
 - validate input / catch errors
+- global error catcher ?
