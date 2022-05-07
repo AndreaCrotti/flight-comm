@@ -3,7 +3,7 @@ package pro.juxt.flighttower.utils
 import org.springframework.stereotype.Component
 
 @Component
-class PrintHelper {
+object PrintHelper {
 
     private val welcomeMessage = """
         

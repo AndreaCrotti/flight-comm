@@ -6,7 +6,16 @@ import pro.juxt.flighttower.services.FlightEventService
 import java.time.LocalDateTime
 
 @Component
-class InputReader(val flightEventService: FlightEventService) {
+class InputReader(
+    val printHelper : PrintHelper,
+    val flightEventService: FlightEventService
+) {
+
+    fun startUp() {
+        printHelper.printWelcome()
+        printHelper.printModeSelection()
+        setInputMode()
+    }
 
     fun setInputMode() {
         when (readln()) {

@@ -15,7 +15,27 @@ import java.io.InputStream
 internal class InputReaderTest {
 
     private val mockEventService = mockk<FlightEventService>()
-    private val inputReader = spyk<InputReader>(InputReader(mockEventService))
+    private val mockPrintHelper = mockk<PrintHelper>()
+    private val inputReader = spyk<InputReader>(InputReader(mockPrintHelper, mockEventService))
+
+    @Test
+    fun start_up_prints_welcome() {
+        every { mockPrintHelper.printWelcome() } returns Unit
+        every { mockPrintHelper.printModeSelection() } returns Unit
+        every { inputReader.setInputMode() } returns Unit
+        inputReader.startUp()
+        verify(exactly = 1) { mockPrintHelper.printWelcome() }
+    }
+
+    @Test
+    fun start_up_leads_to_mode_selection() {
+        every { mockPrintHelper.printWelcome() } returns Unit
+        every { mockPrintHelper.printModeSelection() } returns Unit
+        every { inputReader.setInputMode() } returns Unit
+        inputReader.startUp()
+        verify(exactly = 1) { mockPrintHelper.printModeSelection() }
+        verify(exactly = 1) { inputReader.setInputMode() }
+    }
 
     @Test
     fun set_input_mode_1_to_update_event() {

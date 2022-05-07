@@ -59,7 +59,7 @@ class FlightEventRepositoryTest @Autowired constructor (
     }
 
     @Test
-    fun delete_removes_target_event_from_repository() {
+    fun delete_removes_event_from_repository() {
         flightEventRepository.save(stubFlightEvent)
 
         val deleteCount = flightEventRepository.deleteByPlaneIdAndTimestamp(

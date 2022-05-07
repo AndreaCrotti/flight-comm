@@ -23,7 +23,8 @@
 ## Low-level
 
 - test multiple saves
-- test upsert
+- test upsert - x
+- make print helper object and dependency of input reader - x
 - make update confirm if update or insert was done
 - print confirmation of insert
 - print confirmation of upsert
@@ -31,4 +32,5 @@
 - help functions
 - switch modes
 - exit
-- make print helper object and dependency of input reader
+- print input format for each mode
+- validate input / catch errors
