@@ -31,6 +31,8 @@ internal class InputReaderTest {
         every { mockPrintHelper.printUpdateNotSuccess() } returns Unit
         every { mockPrintHelper.printEventSaved() } returns Unit
         every { mockPrintHelper.printErrorConnectingToDb() } returns Unit
+        every { mockPrintHelper.printDelete(1) } returns Unit
+        every { mockPrintHelper.printDeleteUnsuccessful() } returns Unit
     }
 
     @Test
@@ -123,7 +125,7 @@ internal class InputReaderTest {
     }
 
     @Test
-    fun update_event_prints_event_saved_on_upsert() {
+    fun update_event_prints_on_upsert() {
         stdin(eventString)
         every { mockEventService.updateEvent(stubEvent()) } returns
                 UpdateResult.acknowledged(0, 1, null)
@@ -154,6 +156,30 @@ internal class InputReaderTest {
         every { mockEventService.deleteEvent(stubDeleteEvent) } returns 1
         inputReader.deleteEvent()
         verify(exactly = 1) { mockEventService.deleteEvent(stubDeleteEvent) }
+    }
+
+    @Test
+    fun delete_prints_successful() {
+        stdin(deleteString)
+        every { mockEventService.deleteEvent(stubDeleteEvent) } returns 1
+        inputReader.deleteEvent()
+        verify(exactly = 1) { mockPrintHelper.printDelete(1) }
+    }
+
+    @Test
+    fun delete_prints_unsuccessful() {
+        stdin(deleteString)
+        every { mockEventService.deleteEvent(stubDeleteEvent) } returns 0
+        inputReader.deleteEvent()
+        verify(exactly = 1) { mockPrintHelper.printDeleteUnsuccessful() }
+    }
+
+    @Test
+    fun delete_prints_error_on_exception() {
+        stdin(deleteString)
+        every { mockEventService.deleteEvent(stubDeleteEvent)  } throws mockDataBaseError
+        inputReader.deleteEvent()
+        verify(exactly = 1) { mockPrintHelper.printErrorConnectingToDb() }
     }
 
     private fun stdin(string: String) {

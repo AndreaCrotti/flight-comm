@@ -22,7 +22,7 @@ class InputReader(
         when (readln()) {
             "1" -> readEvent()
             "2" -> updateEvent()
-            "3" -> TODO("handle delete" )
+            "3" -> deleteEvent()
             "4" -> TODO("handle get info" )
             else -> {
                 println("input not recognised.")
@@ -36,9 +36,7 @@ class InputReader(
         try {
             if (flightEventService.recordNewEvent(flightEvent)) {
                 printHelper.printEventSaved()
-            } else {
-                printHelper.printSaveFailed()
-            }
+            } else printHelper.printSaveFailed()
         } catch (exception : java.lang.Exception) {
             printHelper.printErrorConnectingToDb()
         }
@@ -51,9 +49,7 @@ class InputReader(
             if (updateResult.wasAcknowledged()) {
                 if (updateResult.matchedCount > 0L) {
                     printHelper.printUpdateSuccess(updateResult.modifiedCount)
-                } else {
-                    printHelper.printEventSaved()
-                }
+                } else printHelper.printEventSaved()
             } else printHelper.printUpdateNotSuccess()
         } catch (exception : java.lang.Exception) {
             printHelper.printErrorConnectingToDb()
@@ -62,6 +58,13 @@ class InputReader(
 
     fun deleteEvent() {
         val deleteEvent = toDeleteEvent(readln())
+        try {
+            val deleteCount = flightEventService.deleteEvent(deleteEvent)
+            if (deleteCount > 0) printHelper.printDelete(deleteCount)
+            else printHelper.printDeleteUnsuccessful()
+        } catch (exception : java.lang.Exception) {
+            printHelper.printErrorConnectingToDb()
+        }
     }
 
     private fun toEvent(input: String) : FlightEvent {
@@ -72,7 +75,9 @@ class InputReader(
     }
 
     private fun toDeleteEvent(input: String) : DeleteEvent {
-        TODO()
+        val segments = input.split(" ")
+        // TODO add validation here
+        return DeleteEvent(segments[0], LocalDateTime.parse(segments[1]))
     }
 
 }

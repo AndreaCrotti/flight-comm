@@ -42,4 +42,8 @@ object PrintHelper {
 
     fun printErrorConnectingToDb() = println("Error connecting to database")
 
+    fun printDelete(count : Long) = println("Record deleted, count: $count")
+
+    fun printDeleteUnsuccessful() = println("Delete unsuccessful, no matching event found")
+
 }
