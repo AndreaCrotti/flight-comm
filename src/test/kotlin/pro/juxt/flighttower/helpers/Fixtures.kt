@@ -11,7 +11,7 @@ object Fixtures {
 
     private const val LAND = "Land"
     private const val RE_FUEL = "Re-Fuel"
-    private const val TAKE_OFF = "Take-Off"
+    const val TAKE_OFF = "Take-Off"
 
     const val eventString = "F123 747 PARIS BERLIN Land 2022-05-04T13:30:00 150"
 
