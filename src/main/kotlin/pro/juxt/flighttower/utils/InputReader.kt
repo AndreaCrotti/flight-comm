@@ -72,6 +72,7 @@ class InputReader(
         val statusRequest = toStatusRequest(readln())
         try {
             val statusResult = flightEventService.getStatusAt(statusRequest)
+            printHelper.printStatus(statusResult)
         } catch (exception : java.lang.Exception) {
             printHelper.printErrorConnectingToDb()
         }

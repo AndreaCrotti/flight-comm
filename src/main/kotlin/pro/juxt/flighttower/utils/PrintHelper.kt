@@ -1,6 +1,7 @@
 package pro.juxt.flighttower.utils
 
 import org.springframework.stereotype.Component
+import pro.juxt.flighttower.models.FlightStatus
 
 @Component
 object PrintHelper {
@@ -45,5 +46,12 @@ object PrintHelper {
     fun printDelete(count : Long) = println("Record deleted, count: $count")
 
     fun printDeleteUnsuccessful() = println("Delete unsuccessful, no matching event found")
+
+    fun printStatus(flightStatusList: List<FlightStatus>) {
+        println("====")
+            if (flightStatusList.isEmpty()) println("No Data")
+            else flightStatusList.forEach { println("${it.planeId} ${it.status} ${it.fuel}") }
+        println("====")
+    }
 
 }

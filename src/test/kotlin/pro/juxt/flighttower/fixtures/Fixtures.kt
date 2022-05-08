@@ -73,7 +73,12 @@ object Fixtures {
 
     val stubFlightStatus = FlightStatus("F123", "In-Flight", 500)
 
-    val mockDataBaseError = java.lang.RuntimeException("Can't connect to DB")
+    val stubFlightStatus1 = FlightStatus("F101", "In-Flight", 500)
+    val stubFlightStatus2 = FlightStatus("F102", "Landed", 300)
+    val stubFlightStatus3 = FlightStatus("F103", "Awaiting-Takeoff", 225)
+
+    val stubFlightsStatusSet = listOf(stubFlightStatus1, stubFlightStatus2, stubFlightStatus3)
+
 
     val stubDataSet : List<FlightEvent> = listOf(
             stubEvent1,
@@ -86,5 +91,7 @@ object Fixtures {
             stubEvent8,
             stubEvent9
     )
+
+    val mockDataBaseError = java.lang.RuntimeException("Can't connect to DB")
 
 }

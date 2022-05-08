@@ -11,6 +11,7 @@ import pro.juxt.flighttower.fixtures.Fixtures.mockDataBaseError
 import pro.juxt.flighttower.fixtures.Fixtures.stubDeleteEvent
 import pro.juxt.flighttower.fixtures.Fixtures.stubEvent
 import pro.juxt.flighttower.fixtures.Fixtures.stubFlightStatus
+import pro.juxt.flighttower.fixtures.Fixtures.stubFlightsStatusSet
 import pro.juxt.flighttower.fixtures.Fixtures.stubStatusRequest
 import pro.juxt.flighttower.services.FlightEventService
 import java.io.ByteArrayInputStream
@@ -188,6 +189,14 @@ internal class InputReaderTest {
         every { mockEventService.getStatusAt(stubStatusRequest) } returns listOf(stubFlightStatus)
         inputReader.getStatus()
         verify(exactly = 1) { mockEventService.getStatusAt(stubStatusRequest) }
+    }
+
+    @Test
+    fun get_status_prints_all_returned_flight_status() {
+        stdin(getStatusString)
+        every { mockEventService.getStatusAt(stubStatusRequest) } returns stubFlightsStatusSet
+        inputReader.getStatus()
+        verify { mockPrintHelper.printStatus(stubFlightsStatusSet) }
     }
 
     private fun stdin(string: String) {
