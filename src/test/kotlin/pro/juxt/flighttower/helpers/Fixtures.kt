@@ -9,24 +9,35 @@ import java.time.LocalDateTime
 
 object Fixtures {
 
-    private const val LAND = "Land"
+    const val LAND = "Land"
     private const val RE_FUEL = "Re-Fuel"
     const val TAKE_OFF = "Take-Off"
 
     const val eventString = "F123 747 PARIS BERLIN Land 2022-05-04T13:30:00 150"
 
-    val stubEvent1 = stubEvent(planeId = "F101", origin = "MANCHESTER", destination = "MIAMI",
+    /**
+        Flight from London to Miami - End Status : Take-Off , Fuel 500
+     */
+    val stubEvent1 = stubEvent(planeId = "F101", origin = "LONDON", destination = "MIAMI",
                         eventType = LAND, timestamp = stubDateTime(hour = 7, minute = 0), fuelDelta = 0)
-    val stubEvent2 = stubEvent(planeId = "F101", origin = "MANCHESTER", destination = "MIAMI",
+    val stubEvent2 = stubEvent(planeId = "F101", origin = "LONDON", destination = "MIAMI",
                         eventType = RE_FUEL, timestamp = stubDateTime(hour = 10, minute = 0), fuelDelta = 500)
-    val stubEvent3 = stubEvent(planeId = "F101", origin = "MANCHESTER", destination = "MIAMI",
+    val stubEvent3 = stubEvent(planeId = "F101", origin = "LONDON", destination = "MIAMI",
                         eventType = TAKE_OFF, timestamp = stubDateTime(hour = 13, minute = 0), fuelDelta = 0)
+
+    /**
+        Flight from Reykjavik to Amsterdam - End Status : Land , Fuel 300
+     */
     val stubEvent4 = stubEvent(planeId = "F102", origin = "REYKJAVIK", destination = "AMSTERDAM",
                         eventType = RE_FUEL, timestamp = stubDateTime(hour = 8, minute = 0), fuelDelta = 450)
     val stubEvent5 = stubEvent(planeId = "F102", origin = "REYKJAVIK", destination = "AMSTERDAM",
                         eventType = TAKE_OFF, timestamp = stubDateTime(hour = 11, minute = 0), fuelDelta = 0)
     val stubEvent6 = stubEvent(planeId = "F102", origin = "REYKJAVIK", destination = "AMSTERDAM",
                         eventType = LAND, timestamp = stubDateTime(hour = 14, minute = 0), fuelDelta = -150)
+
+    /**
+     * Flight from Lisbon to Sydney - End Status : Land , Fuel 225
+     */
     val stubEvent7 = stubEvent(planeId = "F103", origin = "LISBON", destination = "SYDNEY",
                         eventType = RE_FUEL, timestamp = stubDateTime(hour = 9, minute = 0), fuelDelta = 800)
     val stubEvent8 = stubEvent(planeId = "F103", origin = "LISBON", destination = "SYDNEY",

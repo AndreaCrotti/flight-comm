@@ -5,14 +5,18 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import pro.juxt.flighttower.helpers.Fixtures.LAND
 import pro.juxt.flighttower.helpers.Fixtures.TAKE_OFF
+import pro.juxt.flighttower.helpers.Fixtures.stubDataSet
 import pro.juxt.flighttower.helpers.Fixtures.stubDateTime
 import pro.juxt.flighttower.helpers.Fixtures.stubDeleteEvent
 import pro.juxt.flighttower.helpers.Fixtures.stubEvent
 import pro.juxt.flighttower.helpers.Fixtures.stubEvent1
 import pro.juxt.flighttower.helpers.Fixtures.stubEvent2
 import pro.juxt.flighttower.helpers.Fixtures.stubEvent3
+import pro.juxt.flighttower.helpers.Fixtures.stubEvent4
 import pro.juxt.flighttower.helpers.Fixtures.stubEvent6
+import pro.juxt.flighttower.helpers.Fixtures.stubEvent7
 import pro.juxt.flighttower.helpers.Fixtures.stubEvent9
 import pro.juxt.flighttower.models.FlightStatus
 import pro.juxt.flighttower.models.StatusRequest
@@ -70,6 +74,18 @@ internal class FlightEventServiceImplTest {
         every { mockRepository.findAllByTimestampLessThanEqual(timestamp) } returns listOf(stubEvent1, stubEvent2, stubEvent3)
         val result = flightEventService.getStatusAt(StatusRequest(timestamp))
         val expectedStatus = listOf(FlightStatus(stubEvent1.planeId, TAKE_OFF, 500))
+        assertEquals(expectedStatus, result)
+    }
+
+    @Test
+    fun get_status_tallies_fuel_deltas_for_multiple_flight() {
+        every { mockRepository.findAllByTimestampLessThanEqual(timestamp) } returns stubDataSet
+        val result = flightEventService.getStatusAt(StatusRequest(timestamp))
+        val expectedStatus = listOf(
+            FlightStatus(stubEvent1.planeId, TAKE_OFF, 500),
+            FlightStatus(stubEvent4.planeId, LAND, 300),
+            FlightStatus(stubEvent7.planeId, LAND, 225),
+        )
         assertEquals(expectedStatus, result)
     }
 
