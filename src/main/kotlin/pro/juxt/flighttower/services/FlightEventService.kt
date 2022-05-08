@@ -2,6 +2,7 @@ package pro.juxt.flighttower.services
 
 import pro.juxt.flighttower.models.DeleteEvent
 import pro.juxt.flighttower.models.FlightEvent
+import pro.juxt.flighttower.models.FlightStatus
 import pro.juxt.flighttower.models.StatusRequest
 
 interface FlightEventService {
@@ -12,6 +13,6 @@ interface FlightEventService {
 
     fun deleteEvent(deleteEvent: DeleteEvent)
 
-    fun getStatusAt(statusRequest: StatusRequest)
+    fun getStatusAt(statusRequest: StatusRequest) : List<FlightStatus>
 
 }

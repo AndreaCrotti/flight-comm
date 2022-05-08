@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service
 import pro.juxt.flighttower.models.DeleteEvent
 import pro.juxt.flighttower.repository.FlightEventRepository
 import pro.juxt.flighttower.models.FlightEvent
+import pro.juxt.flighttower.models.FlightStatus
 import pro.juxt.flighttower.models.StatusRequest
 
 @Service
@@ -22,8 +23,9 @@ class FlightEventServiceImpl(private val flightEventRepository: FlightEventRepos
             deleteEvent.planeId, deleteEvent.timestamp)
     }
 
-    override fun getStatusAt(statusRequest: StatusRequest) {
-        flightEventRepository.findAllByTimestampLessThanEqual(statusRequest.timestamp)
+    override fun getStatusAt(statusRequest: StatusRequest): List<FlightStatus> {
+        val flightEvents = flightEventRepository.findAllByTimestampLessThanEqual(statusRequest.timestamp)
+        return flightEvents.map { FlightStatus(it.planeId, it.eventType, it.fuelDelta) }
     }
 
 }

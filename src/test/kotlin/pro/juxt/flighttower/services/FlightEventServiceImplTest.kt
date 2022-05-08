@@ -3,10 +3,15 @@ package pro.juxt.flighttower.services
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import pro.juxt.flighttower.helpers.Fixtures.stubDateTime
 import pro.juxt.flighttower.helpers.Fixtures.stubDeleteEvent
 import pro.juxt.flighttower.helpers.Fixtures.stubEvent
+import pro.juxt.flighttower.helpers.Fixtures.stubEvent3
+import pro.juxt.flighttower.helpers.Fixtures.stubEvent6
+import pro.juxt.flighttower.helpers.Fixtures.stubEvent9
+import pro.juxt.flighttower.models.FlightStatus
 import pro.juxt.flighttower.models.StatusRequest
 import pro.juxt.flighttower.repository.FlightEventRepository
 
@@ -43,6 +48,19 @@ internal class FlightEventServiceImplTest {
         every { mockRepository.findAllByTimestampLessThanEqual(timestamp) } returns listOf(stubFlightEvent)
         flightEventService.getStatusAt(StatusRequest(timestamp))
         verify(exactly = 1) { mockRepository.findAllByTimestampLessThanEqual(timestamp) }
+    }
+
+    @Test
+    fun get_status_converts_flight_event_to_flight_status() {
+        val timestamp = stubDateTime(5, 14, 30)
+        every { mockRepository.findAllByTimestampLessThanEqual(timestamp) } returns listOf(stubEvent3, stubEvent6, stubEvent9)
+        val result = flightEventService.getStatusAt(StatusRequest(timestamp))
+
+        val expectedStatus3 = FlightStatus(stubEvent3.planeId, stubEvent3.eventType, stubEvent3.fuelDelta)
+        val expectedStatus6 = FlightStatus(stubEvent6.planeId, stubEvent6.eventType, stubEvent6.fuelDelta)
+        val expectedStatus9 = FlightStatus(stubEvent9.planeId, stubEvent9.eventType, stubEvent9.fuelDelta)
+
+        assertEquals(listOf(expectedStatus3, expectedStatus6, expectedStatus9), result)
     }
 
 }
