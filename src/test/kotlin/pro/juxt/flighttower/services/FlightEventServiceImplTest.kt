@@ -43,12 +43,6 @@ internal class FlightEventServiceImplTest {
     }
 
     @Test
-    fun record_new_event_returns_false_save_fails() {
-        every { mockRepository.save(stubFlightEvent) } throws mockDataBaseError
-        assertFalse( flightEventService.recordNewEvent(stubFlightEvent) )
-    }
-
-    @Test
     fun update_event_updates_repository() {
         every { mockRepository.upsert(stubFlightEvent) } returns
                 UpdateResult.acknowledged(1, 1, null)
@@ -57,29 +51,20 @@ internal class FlightEventServiceImplTest {
     }
 
     @Test
-    fun update_event_returns_true_and_count_if_update_successful() {
+    fun update_event_returns_successful_update_result() {
         every { mockRepository.upsert(stubFlightEvent) } returns
                 UpdateResult.acknowledged(1, 1, null)
-        val pair = flightEventService.updateEvent(stubFlightEvent)
-        assertTrue(pair.first)
-        assertEquals(1, pair.second)
+        val updateResult = flightEventService.updateEvent(stubFlightEvent)
+        assertTrue(updateResult.wasAcknowledged())
+        assertEquals(1, updateResult.modifiedCount)
     }
 
     @Test
-    fun update_event_returns_false_if_update_unsuccessful() {
+    fun update_event_returns_unsuccessful_update_result() {
         every { mockRepository.upsert(stubFlightEvent) } returns
                 UpdateResult.unacknowledged()
-        val pair = flightEventService.updateEvent(stubFlightEvent)
-        assertFalse(pair.first)
-        assertEquals(0, pair.second)
-    }
-
-    @Test
-    fun update_event_returns_false_in_case_of_an_error() {
-        every { mockRepository.upsert(stubFlightEvent) } throws mockDataBaseError
-        val pair = flightEventService.updateEvent(stubFlightEvent)
-        assertFalse(pair.first)
-        assertEquals(0, pair.second)
+        val updateResult = flightEventService.updateEvent(stubFlightEvent)
+        assertFalse(updateResult.wasAcknowledged())
     }
 
     @Test

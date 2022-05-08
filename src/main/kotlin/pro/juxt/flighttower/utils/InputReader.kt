@@ -41,7 +41,18 @@ class InputReader(
 
     fun updateEvent() {
         val updateEvent = toEvent(readln())
-        flightEventService.updateEvent(updateEvent)
+        try {
+            val updateResult = flightEventService.updateEvent(updateEvent)
+            if (updateResult.wasAcknowledged()) {
+                if (updateResult.matchedCount > 0L) {
+                    printHelper.printUpdateSuccess(updateResult.modifiedCount)
+                } else {
+                    printHelper.printEventSaved()
+                }
+            } else printHelper.printUpdateNotSuccess()
+        } catch (exception : java.lang.Exception) {
+            printHelper.printErrorConnectingToDb()
+        }
     }
 
     private fun toEvent(input: String) : FlightEvent{

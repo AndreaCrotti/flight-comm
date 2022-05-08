@@ -1,5 +1,6 @@
 package pro.juxt.flighttower.services
 
+import com.mongodb.client.result.UpdateResult
 import pro.juxt.flighttower.models.DeleteEvent
 import pro.juxt.flighttower.models.FlightEvent
 import pro.juxt.flighttower.models.FlightStatus
@@ -9,7 +10,7 @@ interface FlightEventService {
 
     fun recordNewEvent(flightEvent: FlightEvent) : Boolean
 
-    fun updateEvent(flightEvent: FlightEvent) : Pair<Boolean, Long>
+    fun updateEvent(flightEvent: FlightEvent) : UpdateResult
 
     fun deleteEvent(deleteEvent: DeleteEvent)
 

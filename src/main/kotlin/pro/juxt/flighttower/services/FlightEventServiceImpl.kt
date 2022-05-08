@@ -1,5 +1,6 @@
 package pro.juxt.flighttower.services
 
+import com.mongodb.client.result.UpdateResult
 import org.springframework.stereotype.Service
 import pro.juxt.flighttower.models.DeleteEvent
 import pro.juxt.flighttower.repository.FlightEventRepository
@@ -11,21 +12,12 @@ import pro.juxt.flighttower.models.StatusRequest
 class FlightEventServiceImpl(private val flightEventRepository: FlightEventRepository) : FlightEventService {
 
     override fun recordNewEvent(flightEvent: FlightEvent) : Boolean {
-        return try {
-            val savedEvent = flightEventRepository.save(flightEvent)
-            flightEvent == savedEvent
-        } catch (exception: Exception) {
-            false
-        }
+        val savedEvent = flightEventRepository.save(flightEvent)
+        return flightEvent == savedEvent
     }
 
-    override fun updateEvent(flightEvent: FlightEvent) : Pair<Boolean, Long> {
-        return try {
-            val result = flightEventRepository.upsert(flightEvent)
-            Pair(result.wasAcknowledged(), result.modifiedCount)
-        } catch (exception: Exception) {
-            Pair(false, 0)
-        }
+    override fun updateEvent(flightEvent: FlightEvent) : UpdateResult {
+        return flightEventRepository.upsert(flightEvent)
     }
 
     override fun deleteEvent(deleteEvent: DeleteEvent) {

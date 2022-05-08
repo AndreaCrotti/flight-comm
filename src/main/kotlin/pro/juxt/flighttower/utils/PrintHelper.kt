@@ -31,4 +31,13 @@ object PrintHelper {
     fun printModeSelection() {
         println(selectInputMode)
     }
+
+    fun printEventSaved() = println("New event successfully saved")
+
+    fun printUpdateSuccess(updates : Long) = println("Update successful, $updates records updated")
+
+    fun printUpdateNotSuccess() = println("Update unsuccessful")
+
+    fun printErrorConnectingToDb() = println("Error connecting to database")
+
 }
