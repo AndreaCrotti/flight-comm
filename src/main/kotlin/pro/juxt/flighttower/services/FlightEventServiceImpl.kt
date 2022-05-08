@@ -25,7 +25,14 @@ class FlightEventServiceImpl(private val flightEventRepository: FlightEventRepos
 
     override fun getStatusAt(statusRequest: StatusRequest): List<FlightStatus> {
         val flightEvents = flightEventRepository.findAllByTimestampLessThanEqual(statusRequest.timestamp)
-        return flightEvents.map { FlightStatus(it.planeId, it.eventType, it.fuelDelta) }
+        val groupedEvents = flightEvents.groupBy { it.planeId }
+        val talliedEvents = groupedEvents.mapValues { entry ->
+            entry.value.sortedByDescending { it.timestamp }
+                .foldRight(Pair("No Data", 0)) { flightEvent, pair ->
+                    Pair(flightEvent.eventType, flightEvent.fuelDelta + pair.second)
+            }
+        }
+        return talliedEvents.map { FlightStatus(it.key, it.value.first, it.value.second) }
     }
 
 }
