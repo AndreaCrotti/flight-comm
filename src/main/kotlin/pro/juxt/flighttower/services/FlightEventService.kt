@@ -12,7 +12,7 @@ interface FlightEventService {
 
     fun updateEvent(flightEvent: FlightEvent) : UpdateResult
 
-    fun deleteEvent(deleteEvent: DeleteEvent)
+    fun deleteEvent(deleteEvent: DeleteEvent) : Long
 
     fun getStatusAt(statusRequest: StatusRequest) : List<FlightStatus>
 

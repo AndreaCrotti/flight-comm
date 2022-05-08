@@ -14,6 +14,7 @@ object Fixtures {
     private const val TAKE_OFF = "Take-Off"
 
     const val eventString = "F123 747 PARIS BERLIN Land 2022-05-04T13:30:00 150"
+    const val deleteString = "F123 2022-05-04T13:30:00"
 
     /**
         Flight from London to Miami - End Status : Take-Off , Fuel 500

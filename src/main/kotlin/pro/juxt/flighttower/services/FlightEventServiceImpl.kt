@@ -20,8 +20,8 @@ class FlightEventServiceImpl(private val flightEventRepository: FlightEventRepos
         return flightEventRepository.upsert(flightEvent)
     }
 
-    override fun deleteEvent(deleteEvent: DeleteEvent) {
-        flightEventRepository.deleteByPlaneIdAndTimestamp(
+    override fun deleteEvent(deleteEvent: DeleteEvent) : Long {
+        return flightEventRepository.deleteByPlaneIdAndTimestamp(
             deleteEvent.planeId, deleteEvent.timestamp)
     }
 

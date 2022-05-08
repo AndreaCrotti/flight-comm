@@ -75,6 +75,13 @@ internal class FlightEventServiceImplTest {
     }
 
     @Test
+    fun delete_event_returns_deleted_count() {
+        every { mockRepository.deleteByPlaneIdAndTimestamp(
+            stubDeleteEvent.planeId, stubDeleteEvent.timestamp) } returns 1
+        assertEquals(1, flightEventService.deleteEvent(stubDeleteEvent))
+    }
+
+    @Test
     fun get_status_calls_repository() {
         every { mockRepository.findAllByTimestampLessThanEqual(timestamp) } returns listOf(stubFlightEvent)
         flightEventService.getStatusAt(StatusRequest(timestamp))

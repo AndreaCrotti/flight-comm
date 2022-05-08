@@ -7,8 +7,10 @@ import io.mockk.spyk
 import io.mockk.verify
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import pro.juxt.flighttower.fixtures.Fixtures.deleteString
 import pro.juxt.flighttower.fixtures.Fixtures.eventString
 import pro.juxt.flighttower.fixtures.Fixtures.mockDataBaseError
+import pro.juxt.flighttower.fixtures.Fixtures.stubDeleteEvent
 import pro.juxt.flighttower.fixtures.Fixtures.stubEvent
 import pro.juxt.flighttower.services.FlightEventService
 import java.io.ByteArrayInputStream
@@ -144,6 +146,14 @@ internal class InputReaderTest {
         every { mockEventService.updateEvent(stubEvent()) } throws mockDataBaseError
         inputReader.updateEvent()
         verify(exactly = 1) { mockPrintHelper.printErrorConnectingToDb() }
+    }
+
+    @Test
+    fun delete_passes_delete_event_to_service() {
+        stdin(deleteString)
+        every { mockEventService.deleteEvent(stubDeleteEvent) } returns 1
+        inputReader.deleteEvent()
+        verify(exactly = 1) { mockEventService.deleteEvent(stubDeleteEvent) }
     }
 
     private fun stdin(string: String) {
