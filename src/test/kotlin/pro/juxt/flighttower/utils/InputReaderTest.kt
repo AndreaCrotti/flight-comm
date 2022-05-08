@@ -56,7 +56,7 @@ internal class InputReaderTest {
     @Test
     fun read_event_passes_flight_event_to_service() {
         stdin(eventString)
-        every { mockEventService.recordNewEvent(stubEvent()) } returns Unit
+        every { mockEventService.recordNewEvent(stubEvent()) } returns true
         inputReader.readEvent()
         verify(exactly = 1) { mockEventService.recordNewEvent(stubEvent()) }
     }

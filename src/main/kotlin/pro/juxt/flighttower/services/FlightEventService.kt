@@ -7,7 +7,7 @@ import pro.juxt.flighttower.models.StatusRequest
 
 interface FlightEventService {
 
-    fun recordNewEvent(flightEvent: FlightEvent)
+    fun recordNewEvent(flightEvent: FlightEvent) : Boolean
 
     fun updateEvent(flightEvent: FlightEvent)
 

@@ -10,8 +10,13 @@ import pro.juxt.flighttower.models.StatusRequest
 @Service
 class FlightEventServiceImpl(private val flightEventRepository: FlightEventRepository) : FlightEventService {
 
-    override fun recordNewEvent(flightEvent: FlightEvent) {
-        flightEventRepository.save(flightEvent)
+    override fun recordNewEvent(flightEvent: FlightEvent) : Boolean {
+        return try {
+            val savedEvent = flightEventRepository.save(flightEvent)
+            flightEvent == savedEvent
+        } catch (exception: Exception) {
+            false
+        }
     }
 
     override fun updateEvent(flightEvent: FlightEvent) {

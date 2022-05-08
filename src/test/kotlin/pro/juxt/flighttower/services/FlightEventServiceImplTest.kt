@@ -3,7 +3,7 @@ package pro.juxt.flighttower.services
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import pro.juxt.flighttower.helpers.Fixtures.stubDataSet
 import pro.juxt.flighttower.helpers.Fixtures.stubDateTime
@@ -32,6 +32,18 @@ internal class FlightEventServiceImplTest {
         every { mockRepository.save(stubFlightEvent) } returns stubFlightEvent
         flightEventService.recordNewEvent(stubFlightEvent)
         verify(exactly = 1) { mockRepository.save(stubFlightEvent) }
+    }
+
+    @Test
+    fun record_new_event_returns_true_on_save() {
+        every { mockRepository.save(stubFlightEvent) } returns stubFlightEvent
+        assertTrue( flightEventService.recordNewEvent(stubFlightEvent) )
+    }
+
+    @Test
+    fun record_new_event_returns_false_save_fails() {
+        every { mockRepository.save(stubFlightEvent) } throws java.lang.RuntimeException("Can't connect to DB")
+        assertFalse( flightEventService.recordNewEvent(stubFlightEvent) )
     }
 
     @Test
