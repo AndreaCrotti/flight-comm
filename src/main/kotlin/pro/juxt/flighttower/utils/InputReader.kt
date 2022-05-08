@@ -3,6 +3,7 @@ package pro.juxt.flighttower.utils
 import org.springframework.stereotype.Component
 import pro.juxt.flighttower.models.DeleteEvent
 import pro.juxt.flighttower.models.FlightEvent
+import pro.juxt.flighttower.models.StatusRequest
 import pro.juxt.flighttower.services.FlightEventService
 import java.time.LocalDateTime
 
@@ -67,6 +68,15 @@ class InputReader(
         }
     }
 
+    fun getStatus() {
+        val statusRequest = toStatusRequest(readln())
+        try {
+            val statusResult = flightEventService.getStatusAt(statusRequest)
+        } catch (exception : java.lang.Exception) {
+            printHelper.printErrorConnectingToDb()
+        }
+    }
+
     private fun toEvent(input: String) : FlightEvent {
         val segments = input.split(" ")
         // TODO add validation here on
@@ -78,6 +88,11 @@ class InputReader(
         val segments = input.split(" ")
         // TODO add validation here
         return DeleteEvent(segments[0], LocalDateTime.parse(segments[1]))
+    }
+
+    private fun toStatusRequest(input: String) : StatusRequest {
+        // TODO add validation here
+        return StatusRequest(LocalDateTime.parse(input))
     }
 
 }

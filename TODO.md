@@ -25,9 +25,9 @@
 - test multiple saves
 - test upsert - x
 - make print helper object and dependency of input reader - x
-- make update confirm if update or insert was done
-- print confirmation of insert
-- print confirmation of upsert
+- make update confirm if update or insert was done - x
+- print confirmation of insert - x
+- print confirmation of upsert - x
 - make event readers recursive
 - help functions
 - switch modes
@@ -35,4 +35,4 @@
 - print input format for each mode
 - validate input / catch errors
 - global error catcher ?
-- make sure find all results are sorted
+- make sure find all results are sorted - x

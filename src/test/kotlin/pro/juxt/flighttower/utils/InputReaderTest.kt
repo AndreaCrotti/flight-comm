@@ -1,17 +1,17 @@
 package pro.juxt.flighttower.utils
 
 import com.mongodb.client.result.UpdateResult
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.spyk
-import io.mockk.verify
+import io.mockk.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import pro.juxt.flighttower.fixtures.Fixtures.deleteString
 import pro.juxt.flighttower.fixtures.Fixtures.eventString
+import pro.juxt.flighttower.fixtures.Fixtures.getStatusString
 import pro.juxt.flighttower.fixtures.Fixtures.mockDataBaseError
 import pro.juxt.flighttower.fixtures.Fixtures.stubDeleteEvent
 import pro.juxt.flighttower.fixtures.Fixtures.stubEvent
+import pro.juxt.flighttower.fixtures.Fixtures.stubFlightStatus
+import pro.juxt.flighttower.fixtures.Fixtures.stubStatusRequest
 import pro.juxt.flighttower.services.FlightEventService
 import java.io.ByteArrayInputStream
 
@@ -180,6 +180,14 @@ internal class InputReaderTest {
         every { mockEventService.deleteEvent(stubDeleteEvent)  } throws mockDataBaseError
         inputReader.deleteEvent()
         verify(exactly = 1) { mockPrintHelper.printErrorConnectingToDb() }
+    }
+
+    @Test
+    fun get_status_passes_request_to_service() {
+        stdin(getStatusString)
+        every { mockEventService.getStatusAt(stubStatusRequest) } returns listOf(stubFlightStatus)
+        inputReader.getStatus()
+        verify(exactly = 1) { mockEventService.getStatusAt(stubStatusRequest) }
     }
 
     private fun stdin(string: String) {

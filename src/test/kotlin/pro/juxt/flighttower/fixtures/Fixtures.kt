@@ -2,6 +2,8 @@ package pro.juxt.flighttower.fixtures
 
 import pro.juxt.flighttower.models.DeleteEvent
 import pro.juxt.flighttower.models.FlightEvent
+import pro.juxt.flighttower.models.FlightStatus
+import pro.juxt.flighttower.models.StatusRequest
 import java.time.LocalDateTime
 
 
@@ -15,6 +17,7 @@ object Fixtures {
 
     const val eventString = "F123 747 PARIS BERLIN Land 2022-05-04T13:30:00 150"
     const val deleteString = "F123 2022-05-04T13:30:00"
+    const val getStatusString = "2022-05-04T13:30:00"
 
     /**
         Flight from London to Miami - End Status : Take-Off , Fuel 500
@@ -65,6 +68,10 @@ object Fixtures {
     ) : LocalDateTime = LocalDateTime.of(2022, 5, day, hour, minute)
 
     val stubDeleteEvent = DeleteEvent("F123", stubDateTime())
+
+    val stubStatusRequest = StatusRequest(stubDateTime())
+
+    val stubFlightStatus = FlightStatus("F123", "In-Flight", 500)
 
     val mockDataBaseError = java.lang.RuntimeException("Can't connect to DB")
 
