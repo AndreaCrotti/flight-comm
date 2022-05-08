@@ -1,6 +1,7 @@
 package pro.juxt.flighttower.utils
 
 import org.springframework.stereotype.Component
+import pro.juxt.flighttower.models.DeleteEvent
 import pro.juxt.flighttower.models.FlightEvent
 import pro.juxt.flighttower.services.FlightEventService
 import java.time.LocalDateTime
@@ -59,11 +60,19 @@ class InputReader(
         }
     }
 
-    private fun toEvent(input: String) : FlightEvent{
+    fun deleteEvent() {
+        val deleteEvent = toDeleteEvent(readln())
+    }
+
+    private fun toEvent(input: String) : FlightEvent {
         val segments = input.split(" ")
+        // TODO add validation here on
         return FlightEvent(segments[0], segments[1], segments[2], segments[3],
             segments[4], LocalDateTime.parse(segments[5]), segments[6].toInt())
     }
 
+    private fun toDeleteEvent(input: String) : DeleteEvent {
+        TODO()
+    }
 
 }

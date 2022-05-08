@@ -47,7 +47,7 @@ internal class InputReaderTest {
     }
 
     @Test
-    fun set_input_mode_1_to_update_event() {
+    fun set_input_mode_1_to_read_new_event() {
         stdin("1")
         every { inputReader.readEvent() } returns Unit
         inputReader.setInputMode()
@@ -55,11 +55,19 @@ internal class InputReaderTest {
     }
 
     @Test
-    fun set_input_mode_2_to_read_new_event() {
+    fun set_input_mode_2_to_update_event() {
         stdin("2")
         every { inputReader.updateEvent() } returns Unit
         inputReader.setInputMode()
         verify(exactly = 1) { inputReader.updateEvent() }
+    }
+
+    @Test
+    fun set_input_mode_3_to_delete_event() {
+        stdin("3")
+        every { inputReader.deleteEvent() } returns Unit
+        inputReader.setInputMode()
+        verify(exactly = 1) { inputReader.deleteEvent() }
     }
 
     @Test
