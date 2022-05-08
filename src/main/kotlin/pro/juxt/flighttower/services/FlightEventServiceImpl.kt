@@ -32,7 +32,16 @@ class FlightEventServiceImpl(private val flightEventRepository: FlightEventRepos
                     Pair(flightEvent.eventType, flightEvent.fuelDelta + pair.second)
             }
         }
-        return talliedEvents.map { FlightStatus(it.key, it.value.first, it.value.second) }
+        return talliedEvents.map { FlightStatus(it.key, getStatus(it.value.first), it.value.second) }
+    }
+
+    private fun getStatus(eventType : String) : String {
+        return when (eventType) {
+            "Land" -> "Landed"
+            "Re-Fuel" -> "Awaiting-Takeoff"
+            "Take-Off" -> "In-Flight"
+            else -> eventType
+        }
     }
 
 }

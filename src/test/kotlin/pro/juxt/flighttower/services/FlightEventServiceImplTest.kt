@@ -5,8 +5,6 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import pro.juxt.flighttower.helpers.Fixtures.LAND
-import pro.juxt.flighttower.helpers.Fixtures.TAKE_OFF
 import pro.juxt.flighttower.helpers.Fixtures.stubDataSet
 import pro.juxt.flighttower.helpers.Fixtures.stubDateTime
 import pro.juxt.flighttower.helpers.Fixtures.stubDeleteEvent
@@ -62,9 +60,9 @@ internal class FlightEventServiceImplTest {
         every { mockRepository.findAllByTimestampLessThanEqual(timestamp) } returns listOf(stubEvent3, stubEvent6, stubEvent9)
         val result = flightEventService.getStatusAt(StatusRequest(timestamp))
 
-        val expectedStatus3 = FlightStatus(stubEvent3.planeId, stubEvent3.eventType, stubEvent3.fuelDelta)
-        val expectedStatus6 = FlightStatus(stubEvent6.planeId, stubEvent6.eventType, stubEvent6.fuelDelta)
-        val expectedStatus9 = FlightStatus(stubEvent9.planeId, stubEvent9.eventType, stubEvent9.fuelDelta)
+        val expectedStatus3 = FlightStatus(stubEvent3.planeId, "In-Flight", stubEvent3.fuelDelta)
+        val expectedStatus6 = FlightStatus(stubEvent6.planeId, "Landed", stubEvent6.fuelDelta)
+        val expectedStatus9 = FlightStatus(stubEvent9.planeId, "Landed", stubEvent9.fuelDelta)
 
         assertEquals(listOf(expectedStatus3, expectedStatus6, expectedStatus9), result)
     }
@@ -73,7 +71,7 @@ internal class FlightEventServiceImplTest {
     fun get_status_tallies_fuel_deltas_for_flight() {
         every { mockRepository.findAllByTimestampLessThanEqual(timestamp) } returns listOf(stubEvent1, stubEvent2, stubEvent3)
         val result = flightEventService.getStatusAt(StatusRequest(timestamp))
-        val expectedStatus = listOf(FlightStatus(stubEvent1.planeId, TAKE_OFF, 500))
+        val expectedStatus = listOf(FlightStatus(stubEvent1.planeId, "In-Flight", 500))
         assertEquals(expectedStatus, result)
     }
 
@@ -82,9 +80,9 @@ internal class FlightEventServiceImplTest {
         every { mockRepository.findAllByTimestampLessThanEqual(timestamp) } returns stubDataSet
         val result = flightEventService.getStatusAt(StatusRequest(timestamp))
         val expectedStatus = listOf(
-            FlightStatus(stubEvent1.planeId, TAKE_OFF, 500),
-            FlightStatus(stubEvent4.planeId, LAND, 300),
-            FlightStatus(stubEvent7.planeId, LAND, 225),
+            FlightStatus(stubEvent1.planeId, "In-Flight", 500),
+            FlightStatus(stubEvent4.planeId, "Landed", 300),
+            FlightStatus(stubEvent7.planeId, "Landed", 225),
         )
         assertEquals(expectedStatus, result)
     }

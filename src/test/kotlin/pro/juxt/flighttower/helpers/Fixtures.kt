@@ -9,9 +9,9 @@ import java.time.LocalDateTime
 
 object Fixtures {
 
-    const val LAND = "Land"
+    private const val LAND = "Land"
     private const val RE_FUEL = "Re-Fuel"
-    const val TAKE_OFF = "Take-Off"
+    private const val TAKE_OFF = "Take-Off"
 
     const val eventString = "F123 747 PARIS BERLIN Land 2022-05-04T13:30:00 150"
 
