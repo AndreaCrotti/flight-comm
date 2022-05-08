@@ -34,6 +34,8 @@ object PrintHelper {
 
     fun printEventSaved() = println("New event successfully saved")
 
+    fun printSaveFailed() = println("Failed to save event")
+
     fun printUpdateSuccess(updates : Long) = println("Update successful, $updates records updated")
 
     fun printUpdateNotSuccess() = println("Update unsuccessful")

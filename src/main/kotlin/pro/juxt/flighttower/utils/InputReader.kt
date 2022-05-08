@@ -32,10 +32,14 @@ class InputReader(
 
     fun readEvent() {
         val flightEvent = toEvent(readln())
-        if (flightEventService.recordNewEvent(flightEvent)) {
-            println("event successfully saved")
-        } else {
-            println("failed to save event - problem connecting to db")
+        try {
+            if (flightEventService.recordNewEvent(flightEvent)) {
+                printHelper.printEventSaved()
+            } else {
+                printHelper.printSaveFailed()
+            }
+        } catch (exception : java.lang.Exception) {
+            printHelper.printErrorConnectingToDb()
         }
     }
 

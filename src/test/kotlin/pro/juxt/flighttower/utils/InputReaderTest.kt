@@ -71,6 +71,30 @@ internal class InputReaderTest {
     }
 
     @Test
+    fun read_event_prints_save_successful() {
+        stdin(eventString)
+        every { mockEventService.recordNewEvent(stubEvent()) } returns true
+        inputReader.readEvent()
+        verify(exactly = 1) { mockPrintHelper.printEventSaved() }
+    }
+
+    @Test
+    fun read_event_prints_save_failed() {
+        stdin(eventString)
+        every { mockEventService.recordNewEvent(stubEvent()) } returns false
+        inputReader.readEvent()
+        verify(exactly = 1) { mockPrintHelper.printSaveFailed() }
+    }
+
+    @Test
+    fun read_event_prints_error_on_exception() {
+        stdin(eventString)
+        every { mockEventService.recordNewEvent(stubEvent()) } throws mockDataBaseError
+        inputReader.readEvent()
+        verify(exactly = 1) { mockPrintHelper.printErrorConnectingToDb() }
+    }
+
+    @Test
     fun update_event_passes_flight_event_to_service() {
         stdin(eventString)
         every { mockEventService.updateEvent(stubEvent()) } returns
