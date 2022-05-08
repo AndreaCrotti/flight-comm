@@ -1,5 +1,6 @@
 package pro.juxt.flighttower.repository
 
+import com.mongodb.client.result.UpdateResult
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
@@ -19,7 +20,7 @@ private const val FUEL_DELTA = "fuelDelta"
 
 class CustomRepositoryImpl(private val mongoTemplate: MongoTemplate) : CustomRepository {
 
-    override fun upsert(flightEvent: FlightEvent) : Boolean {
+    override fun upsert(flightEvent: FlightEvent) : UpdateResult {
 
         val criteria: Criteria = Criteria.where(PLANE_ID).`is`(flightEvent.planeId)
             .and(TIMESTAMP).`is`(flightEvent.timestamp)
@@ -31,8 +32,7 @@ class CustomRepositoryImpl(private val mongoTemplate: MongoTemplate) : CustomRep
             .set(EVENT_TYPE, flightEvent.eventType)
             .set(FUEL_DELTA, flightEvent.fuelDelta)
 
-        val updateResult = mongoTemplate.upsert(Query(criteria), updateDefinition, FlightEvent::class.java)
-        return updateResult.wasAcknowledged()
+        return mongoTemplate.upsert(Query(criteria), updateDefinition, FlightEvent::class.java)
     }
 
 }

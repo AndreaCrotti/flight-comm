@@ -19,8 +19,13 @@ class FlightEventServiceImpl(private val flightEventRepository: FlightEventRepos
         }
     }
 
-    override fun updateEvent(flightEvent: FlightEvent) {
-        flightEventRepository.upsert(flightEvent)
+    override fun updateEvent(flightEvent: FlightEvent) : Pair<Boolean, Long> {
+        return try {
+            val result = flightEventRepository.upsert(flightEvent)
+            Pair(result.wasAcknowledged(), result.modifiedCount)
+        } catch (exception: Exception) {
+            Pair(false, 0)
+        }
     }
 
     override fun deleteEvent(deleteEvent: DeleteEvent) {

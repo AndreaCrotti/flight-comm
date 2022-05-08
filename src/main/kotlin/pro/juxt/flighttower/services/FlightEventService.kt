@@ -9,7 +9,7 @@ interface FlightEventService {
 
     fun recordNewEvent(flightEvent: FlightEvent) : Boolean
 
-    fun updateEvent(flightEvent: FlightEvent)
+    fun updateEvent(flightEvent: FlightEvent) : Pair<Boolean, Long>
 
     fun deleteEvent(deleteEvent: DeleteEvent)
 

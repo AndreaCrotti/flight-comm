@@ -1,21 +1,23 @@
 package pro.juxt.flighttower.services
 
+import com.mongodb.client.result.UpdateResult
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import pro.juxt.flighttower.helpers.Fixtures.stubDataSet
-import pro.juxt.flighttower.helpers.Fixtures.stubDateTime
-import pro.juxt.flighttower.helpers.Fixtures.stubDeleteEvent
-import pro.juxt.flighttower.helpers.Fixtures.stubEvent
-import pro.juxt.flighttower.helpers.Fixtures.stubEvent1
-import pro.juxt.flighttower.helpers.Fixtures.stubEvent2
-import pro.juxt.flighttower.helpers.Fixtures.stubEvent3
-import pro.juxt.flighttower.helpers.Fixtures.stubEvent4
-import pro.juxt.flighttower.helpers.Fixtures.stubEvent6
-import pro.juxt.flighttower.helpers.Fixtures.stubEvent7
-import pro.juxt.flighttower.helpers.Fixtures.stubEvent9
+import pro.juxt.flighttower.fixtures.Fixtures.mockDataBaseError
+import pro.juxt.flighttower.fixtures.Fixtures.stubDataSet
+import pro.juxt.flighttower.fixtures.Fixtures.stubDateTime
+import pro.juxt.flighttower.fixtures.Fixtures.stubDeleteEvent
+import pro.juxt.flighttower.fixtures.Fixtures.stubEvent
+import pro.juxt.flighttower.fixtures.Fixtures.stubEvent1
+import pro.juxt.flighttower.fixtures.Fixtures.stubEvent2
+import pro.juxt.flighttower.fixtures.Fixtures.stubEvent3
+import pro.juxt.flighttower.fixtures.Fixtures.stubEvent4
+import pro.juxt.flighttower.fixtures.Fixtures.stubEvent6
+import pro.juxt.flighttower.fixtures.Fixtures.stubEvent7
+import pro.juxt.flighttower.fixtures.Fixtures.stubEvent9
 import pro.juxt.flighttower.models.FlightStatus
 import pro.juxt.flighttower.models.StatusRequest
 import pro.juxt.flighttower.repository.FlightEventRepository
@@ -42,15 +44,42 @@ internal class FlightEventServiceImplTest {
 
     @Test
     fun record_new_event_returns_false_save_fails() {
-        every { mockRepository.save(stubFlightEvent) } throws java.lang.RuntimeException("Can't connect to DB")
+        every { mockRepository.save(stubFlightEvent) } throws mockDataBaseError
         assertFalse( flightEventService.recordNewEvent(stubFlightEvent) )
     }
 
     @Test
     fun update_event_updates_repository() {
-        every { mockRepository.upsert(stubFlightEvent) } returns true
+        every { mockRepository.upsert(stubFlightEvent) } returns
+                UpdateResult.acknowledged(1, 1, null)
         flightEventService.updateEvent(stubFlightEvent)
         verify(exactly = 1) { mockRepository.upsert(stubFlightEvent) }
+    }
+
+    @Test
+    fun update_event_returns_true_and_count_if_update_successful() {
+        every { mockRepository.upsert(stubFlightEvent) } returns
+                UpdateResult.acknowledged(1, 1, null)
+        val pair = flightEventService.updateEvent(stubFlightEvent)
+        assertTrue(pair.first)
+        assertEquals(1, pair.second)
+    }
+
+    @Test
+    fun update_event_returns_false_if_update_unsuccessful() {
+        every { mockRepository.upsert(stubFlightEvent) } returns
+                UpdateResult.unacknowledged()
+        val pair = flightEventService.updateEvent(stubFlightEvent)
+        assertFalse(pair.first)
+        assertEquals(0, pair.second)
+    }
+
+    @Test
+    fun update_event_returns_false_in_case_of_an_error() {
+        every { mockRepository.upsert(stubFlightEvent) } throws mockDataBaseError
+        val pair = flightEventService.updateEvent(stubFlightEvent)
+        assertFalse(pair.first)
+        assertEquals(0, pair.second)
     }
 
     @Test

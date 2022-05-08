@@ -1,4 +1,4 @@
-package pro.juxt.flighttower.helpers
+package pro.juxt.flighttower.repository
 
 import io.mockk.every
 import io.mockk.mockk

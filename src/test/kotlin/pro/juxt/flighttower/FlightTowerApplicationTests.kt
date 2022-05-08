@@ -2,7 +2,7 @@ package pro.juxt.flighttower
 
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.Import
-import pro.juxt.flighttower.helpers.MockBeanConfiguration
+import pro.juxt.flighttower.repository.MockBeanConfiguration
 
 
 @SpringBootTest

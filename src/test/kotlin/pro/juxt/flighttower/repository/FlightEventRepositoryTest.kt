@@ -7,17 +7,16 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest
 import org.springframework.context.annotation.Import
-import pro.juxt.flighttower.helpers.Fixtures.stubDataSet
-import pro.juxt.flighttower.helpers.Fixtures.stubDateTime
-import pro.juxt.flighttower.helpers.Fixtures.stubDeleteEvent
-import pro.juxt.flighttower.helpers.Fixtures.stubEvent
-import pro.juxt.flighttower.helpers.Fixtures.stubEvent1
-import pro.juxt.flighttower.helpers.Fixtures.stubEvent2
-import pro.juxt.flighttower.helpers.Fixtures.stubEvent4
-import pro.juxt.flighttower.helpers.Fixtures.stubEvent5
-import pro.juxt.flighttower.helpers.Fixtures.stubEvent7
-import pro.juxt.flighttower.helpers.Fixtures.stubEvent8
-import pro.juxt.flighttower.helpers.MockBeanConfiguration
+import pro.juxt.flighttower.fixtures.Fixtures.stubDataSet
+import pro.juxt.flighttower.fixtures.Fixtures.stubDateTime
+import pro.juxt.flighttower.fixtures.Fixtures.stubDeleteEvent
+import pro.juxt.flighttower.fixtures.Fixtures.stubEvent
+import pro.juxt.flighttower.fixtures.Fixtures.stubEvent1
+import pro.juxt.flighttower.fixtures.Fixtures.stubEvent2
+import pro.juxt.flighttower.fixtures.Fixtures.stubEvent4
+import pro.juxt.flighttower.fixtures.Fixtures.stubEvent5
+import pro.juxt.flighttower.fixtures.Fixtures.stubEvent7
+import pro.juxt.flighttower.fixtures.Fixtures.stubEvent8
 import pro.juxt.flighttower.models.FlightEvent
 
 
@@ -47,22 +46,30 @@ class FlightEventRepositoryTest @Autowired constructor (
         flightEventRepository.save(stubFlightEvent)
 
         val updatedEvent = stubEvent(fuelDelta = 300)
-        val acknowledgement = flightEventRepository.upsert(updatedEvent)
+        flightEventRepository.upsert(updatedEvent)
         val database : List<FlightEvent> = flightEventRepository.findAll()
 
-        assertTrue(acknowledgement)
         assertEquals(1, database.size)
         assertEquals(updatedEvent, database.first())
     }
 
     @Test
     fun upsert_inserts_new_event_if_not_found() {
-        val acknowledgement = flightEventRepository.upsert(stubFlightEvent)
+        flightEventRepository.upsert(stubFlightEvent)
         val database : List<FlightEvent> = flightEventRepository.findAll()
 
-        assertTrue(acknowledgement)
         assertEquals(1, database.size)
         assertEquals(stubFlightEvent, database.first())
+    }
+
+    @Test
+    fun upsert_returns_results_of_update_action() {
+        flightEventRepository.save(stubFlightEvent)
+        val updatedEvent = stubEvent(fuelDelta = 300)
+        val updateResult = flightEventRepository.upsert(updatedEvent)
+
+        assertTrue(updateResult.wasAcknowledged())
+        assertEquals(1, updateResult.modifiedCount)
     }
 
     @Test

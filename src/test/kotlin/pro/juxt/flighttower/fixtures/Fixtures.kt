@@ -1,4 +1,4 @@
-package pro.juxt.flighttower.helpers
+package pro.juxt.flighttower.fixtures
 
 import pro.juxt.flighttower.models.DeleteEvent
 import pro.juxt.flighttower.models.FlightEvent
@@ -64,6 +64,8 @@ object Fixtures {
     ) : LocalDateTime = LocalDateTime.of(2022, 5, day, hour, minute)
 
     val stubDeleteEvent = DeleteEvent("F123", stubDateTime())
+
+    val mockDataBaseError = java.lang.RuntimeException("Can't connect to DB")
 
     val stubDataSet : List<FlightEvent> = listOf(
             stubEvent1,

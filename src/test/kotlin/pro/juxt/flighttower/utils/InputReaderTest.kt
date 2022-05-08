@@ -5,8 +5,8 @@ import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
 import org.junit.jupiter.api.Test
-import pro.juxt.flighttower.helpers.Fixtures.eventString
-import pro.juxt.flighttower.helpers.Fixtures.stubEvent
+import pro.juxt.flighttower.fixtures.Fixtures.eventString
+import pro.juxt.flighttower.fixtures.Fixtures.stubEvent
 import pro.juxt.flighttower.services.FlightEventService
 import java.io.ByteArrayInputStream
 
@@ -64,7 +64,7 @@ internal class InputReaderTest {
     @Test
     fun update_event_passes_flight_event_to_service() {
         stdin(eventString)
-        every { mockEventService.updateEvent(stubEvent()) } returns Unit
+        every { mockEventService.updateEvent(stubEvent()) } returns Pair(true, 1)
         inputReader.updateEvent()
         verify(exactly = 1) { mockEventService.updateEvent(stubEvent()) }
     }
