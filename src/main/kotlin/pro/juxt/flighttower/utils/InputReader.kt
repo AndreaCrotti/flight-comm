@@ -33,57 +33,57 @@ class InputReader(
     }
 
     fun readEvent() {
-        val flightEvent = toEvent(readln())
-        try {
+        catchErrors {
+            val flightEvent = toEvent(readln())
             if (flightEventService.recordNewEvent(flightEvent)) {
                 printHelper.printEventSaved()
             } else printHelper.printSaveFailed()
-        } catch (exception : java.lang.Exception) {
-            printHelper.printErrorConnectingToDb()
         }
         runAgain { readEvent() }
     }
 
     fun updateEvent() {
-        val updateEvent = toEvent(readln())
-        try {
+        catchErrors {
+            val updateEvent = toEvent(readln())
             val updateResult = flightEventService.updateEvent(updateEvent)
             if (updateResult.wasAcknowledged()) {
                 if (updateResult.matchedCount > 0L) {
                     printHelper.printUpdateSuccess(updateResult.modifiedCount)
                 } else printHelper.printEventSaved()
             } else printHelper.printUpdateNotSuccess()
-        } catch (exception : java.lang.Exception) {
-            printHelper.printErrorConnectingToDb()
         }
         runAgain { updateEvent() }
     }
 
     fun deleteEvent() {
-        val deleteEvent = toDeleteEvent(readln())
-        try {
+        catchErrors {
+            val deleteEvent = toDeleteEvent(readln())
             val deleteCount = flightEventService.deleteEvent(deleteEvent)
             if (deleteCount > 0) printHelper.printDelete(deleteCount)
             else printHelper.printDeleteUnsuccessful()
-        } catch (exception : java.lang.Exception) {
-            printHelper.printErrorConnectingToDb()
         }
         runAgain { deleteEvent() }
     }
 
     fun getStatus() {
-        val statusRequest = toStatusRequest(readln())
-        try {
+        catchErrors {
+            val statusRequest = toStatusRequest(readln())
             val statusResult = flightEventService.getStatusAt(statusRequest)
             printHelper.printStatus(statusResult)
-        } catch (exception : java.lang.Exception) {
-            printHelper.printErrorConnectingToDb()
         }
         runAgain { getStatus() }
     }
 
     fun runAgain(function: () -> Unit ) {
         function()
+    }
+
+    fun catchErrors(function: () -> Unit) {
+        try {
+            function()
+        } catch (exception : java.lang.Exception) {
+            printHelper.printErrorConnectingToDb()
+        }
     }
 
     private fun toEvent(input: String) : FlightEvent {
