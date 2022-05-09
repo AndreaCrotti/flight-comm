@@ -18,6 +18,9 @@ import java.io.ByteArrayInputStream
 
 import java.io.InputStream
 
+private const val SWITCH = "switch"
+private const val HELP = "help"
+
 internal class InputReaderTest {
 
     private val mockEventService = mockk<FlightEventService>()
@@ -34,6 +37,7 @@ internal class InputReaderTest {
         every { mockPrintHelper.printErrorConnectingToDb() } returns Unit
         every { mockPrintHelper.printDelete(1) } returns Unit
         every { mockPrintHelper.printDeleteUnsuccessful() } returns Unit
+        every { mockPrintHelper.printHelp() } returns Unit
         // stop recursion running infinitely
         every { inputReader.runAgain(any()) } returns Unit
     }
@@ -49,8 +53,15 @@ internal class InputReaderTest {
     fun start_up_leads_to_mode_selection() {
         every { inputReader.setInputMode() } returns Unit
         inputReader.startUp()
-        verify(exactly = 1) { mockPrintHelper.printModeSelection() }
         verify(exactly = 1) { inputReader.setInputMode() }
+    }
+
+    @Test
+    fun set_input_mode_prints_options() {
+        stdin("1")
+        every { inputReader.readEvent() } returns Unit
+        inputReader.setInputMode()
+        verify(exactly = 1) { mockPrintHelper.printModeSelection() }
     }
 
     @Test
@@ -240,6 +251,58 @@ internal class InputReaderTest {
         every { mockEventService.getStatusAt(stubStatusRequest) } returns listOf(stubFlightStatus)
         inputReader.getStatus()
         verify(exactly = 1) { inputReader.runAgain(any()) }
+    }
+
+    @Test
+    fun check_input_allows_switching_modes() {
+        every { inputReader.setInputMode() } returns Unit
+        inputReader.checkInput(SWITCH) { }
+        verify(exactly = 1) { inputReader.setInputMode() }
+    }
+
+    @Test
+    fun check_input_prints_help_message() {
+        inputReader.checkInput(HELP) { }
+        verify(exactly = 1) { mockPrintHelper.printHelp() }
+    }
+
+    @Test
+    fun check_input_calls_callback_on_help() {
+        every { inputReader.readEvent() } returns Unit
+        inputReader.checkInput(HELP) { inputReader.readEvent() }
+        verify(exactly = 1) { inputReader.readEvent() }
+    }
+
+    @Test
+    fun read_event_checks_input_actions() {
+        stdin(SWITCH)
+        every { inputReader.setInputMode() } returns Unit
+        inputReader.readEvent()
+        verify(exactly = 1) { inputReader.setInputMode() }
+    }
+
+    @Test
+    fun update_event_checks_input_actions() {
+        stdin(SWITCH)
+        every { inputReader.setInputMode() } returns Unit
+        inputReader.updateEvent()
+        verify(exactly = 1) { inputReader.setInputMode() }
+    }
+
+    @Test
+    fun delete_event_checks_input_actions() {
+        stdin(SWITCH)
+        every { inputReader.setInputMode() } returns Unit
+        inputReader.deleteEvent()
+        verify(exactly = 1) { inputReader.setInputMode() }
+    }
+
+    @Test
+    fun get_status_checks_input_actions() {
+        stdin(SWITCH)
+        every { inputReader.setInputMode() } returns Unit
+        inputReader.deleteEvent()
+        verify(exactly = 1) { inputReader.setInputMode() }
     }
 
     private fun stdin(string: String) {

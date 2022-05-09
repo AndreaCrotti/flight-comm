@@ -28,7 +28,7 @@
 - make update confirm if update or insert was done - x
 - print confirmation of insert - x
 - print confirmation of upsert - x
-- make event readers recursive
+- make event readers recursive - x
 - help functions
 - switch modes
 - exit

@@ -6,6 +6,7 @@ import pro.juxt.flighttower.models.FlightEvent
 import pro.juxt.flighttower.models.StatusRequest
 import pro.juxt.flighttower.services.FlightEventService
 import java.time.LocalDateTime
+import kotlin.system.exitProcess
 
 @Component
 class InputReader(
@@ -15,11 +16,11 @@ class InputReader(
 
     fun startUp() {
         printHelper.printWelcome()
-        printHelper.printModeSelection()
         setInputMode()
     }
 
     fun setInputMode() {
+        printHelper.printModeSelection()
         when (readln()) {
             "1" -> readEvent()
             "2" -> updateEvent()
@@ -32,9 +33,22 @@ class InputReader(
         }
     }
 
+    fun checkInput(input : String, callback: () -> Unit) {
+        when (input.lowercase()) {
+            "switch" -> setInputMode()
+            "exit" -> exitProcess(0)
+            "help" -> {
+                printHelper.printHelp()
+                callback()
+            }
+        }
+    }
+
     fun readEvent() {
         catchErrors {
-            val flightEvent = toEvent(readln())
+            val input = readln()
+            checkInput(input) { readEvent() }
+            val flightEvent = toEvent(input)
             if (flightEventService.recordNewEvent(flightEvent)) {
                 printHelper.printEventSaved()
             } else printHelper.printSaveFailed()
@@ -44,7 +58,9 @@ class InputReader(
 
     fun updateEvent() {
         catchErrors {
-            val updateEvent = toEvent(readln())
+            val input = readln()
+            checkInput(input) { updateEvent() }
+            val updateEvent = toEvent(input)
             val updateResult = flightEventService.updateEvent(updateEvent)
             if (updateResult.wasAcknowledged()) {
                 if (updateResult.matchedCount > 0L) {
@@ -57,7 +73,9 @@ class InputReader(
 
     fun deleteEvent() {
         catchErrors {
-            val deleteEvent = toDeleteEvent(readln())
+            val input = readln()
+            checkInput(input) { deleteEvent() }
+            val deleteEvent = toDeleteEvent(input)
             val deleteCount = flightEventService.deleteEvent(deleteEvent)
             if (deleteCount > 0) printHelper.printDelete(deleteCount)
             else printHelper.printDeleteUnsuccessful()
@@ -67,7 +85,9 @@ class InputReader(
 
     fun getStatus() {
         catchErrors {
-            val statusRequest = toStatusRequest(readln())
+            val input = readln()
+            checkInput(input) { getStatus() }
+            val statusRequest = toStatusRequest(input)
             val statusResult = flightEventService.getStatusAt(statusRequest)
             printHelper.printStatus(statusResult)
         }

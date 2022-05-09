@@ -54,4 +54,18 @@ object PrintHelper {
         println("====")
     }
 
+    private val helpMessage = """
+        Help Options:
+        Type any of the following commands, at any time...
+        
+        'switch'    - go back to the main menu to select input modes
+        'help'      - print help options
+        'exit'      - exit program
+        
+    """.trimIndent()
+
+    fun printHelp() = println(helpMessage)
+
+    fun printBye() = println("... goodbye ...")
+
 }
