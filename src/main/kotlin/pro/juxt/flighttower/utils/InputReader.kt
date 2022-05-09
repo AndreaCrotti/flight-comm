@@ -36,7 +36,7 @@ class InputReader(
     fun checkInput(input : String, callback: () -> Unit) {
         when (input.lowercase()) {
             "switch" -> setInputMode()
-            "exit" -> exitProcess(0)
+            "exit" -> exitSystem()
             "help" -> {
                 printHelper.printHelp()
                 callback()
@@ -104,6 +104,11 @@ class InputReader(
         } catch (exception : java.lang.Exception) {
             printHelper.printErrorConnectingToDb()
         }
+    }
+
+    fun exitSystem() {
+        printHelper.printBye()
+        exitProcess(0)
     }
 
     private fun toEvent(input: String) : FlightEvent {

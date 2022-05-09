@@ -20,6 +20,7 @@ import java.io.InputStream
 
 private const val SWITCH = "switch"
 private const val HELP = "help"
+private const val EXIT = "exit"
 
 internal class InputReaderTest {
 
@@ -271,6 +272,13 @@ internal class InputReaderTest {
         every { inputReader.readEvent() } returns Unit
         inputReader.checkInput(HELP) { inputReader.readEvent() }
         verify(exactly = 1) { inputReader.readEvent() }
+    }
+
+    @Test
+    fun check_input_calls_exit() {
+        every { inputReader.exitSystem() } returns Unit
+        inputReader.checkInput(EXIT) { }
+        verify(exactly = 1) { inputReader.exitSystem() }
     }
 
     @Test
