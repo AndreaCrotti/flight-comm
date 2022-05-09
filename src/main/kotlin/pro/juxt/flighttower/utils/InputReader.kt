@@ -48,21 +48,25 @@ class InputReader(
 
     fun readEventWrapper() {
         printHelper.printReadMode()
+        printHelper.eventFormat()
         readEvent()
     }
 
     fun updateEventWrapper() {
         printHelper.printUpdateMode()
+        printHelper.eventFormat()
         updateEvent()
     }
 
     fun deleteEventWrapper() {
         printHelper.printDeleteMode()
+        printHelper.deleteFormat()
         deleteEvent()
     }
 
     fun getStatusWrapper() {
         printHelper.printGetStatusMode()
+        printHelper.timestampFormat()
         getStatus()
     }
 
@@ -127,13 +131,28 @@ class InputReader(
         } catch (numberException : NumberFormatException) {
             printHelper.invalidNumber()
         } catch (illegalArgument : IllegalArgumentException) {
-            printHelper.invalidEventInput()
+            handleIllegalArgument(illegalArgument)
         } catch (dateTimeException : DateTimeParseException) {
             printHelper.invalidDateInput()
+            printHelper.timestampFormat()
         } catch (constraintViolation : ConstraintViolationException) {
             printHelper.invalidEventInput()
+            printHelper.eventFormat()
         } catch (exception : Exception) {
             printHelper.printErrorConnectingToDb()
+        }
+    }
+
+    private fun handleIllegalArgument(exception: IllegalArgumentException) {
+        when (exception.message) {
+            "input event invalid" -> {
+                printHelper.invalidEventInput()
+                printHelper.eventFormat()
+            }
+            "delete event invalid" -> {
+                printHelper.invalidDeleteInput()
+                printHelper.deleteFormat()
+            }
         }
     }
 
@@ -144,14 +163,14 @@ class InputReader(
 
     private fun toEvent(input: String) : FlightEvent {
         val segments = input.split(" ")
-        validateEvent(segments, 7)
+        validateEvent(segments, 7, "input event invalid")
         return FlightEvent(segments[0], segments[1], segments[2], segments[3],
             segments[4], LocalDateTime.parse(segments[5]), segments[6].toInt())
     }
 
     private fun toDeleteEvent(input: String) : DeleteEvent {
         val segments = input.split(" ")
-        validateEvent(segments, 2)
+        validateEvent(segments, 2, "delete event invalid")
         return DeleteEvent(segments[0], LocalDateTime.parse(segments[1]))
     }
 
@@ -159,9 +178,9 @@ class InputReader(
         return StatusRequest(LocalDateTime.parse(input))
     }
 
-    private fun validateEvent(segments: List<String>, size : Int) {
-        if (segments.isEmpty()) throw IllegalArgumentException("invalid event input")
-        if (segments.size != size) throw IllegalArgumentException("invalid event input")
+    private fun validateEvent(segments: List<String>, size : Int, msg : String) {
+        if (segments.isEmpty()) throw IllegalArgumentException(msg)
+        if (segments.size != size) throw IllegalArgumentException(msg)
     }
 
 }

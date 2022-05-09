@@ -313,6 +313,7 @@ internal class InputReaderTest {
         every { inputReader.readEvent() } returns Unit
         inputReader.readEventWrapper()
         verify(exactly = 1)  { mockPrintHelper.printReadMode() }
+        verify(exactly = 1)  { mockPrintHelper.eventFormat() }
         verify(exactly = 1)  { inputReader.readEvent() }
     }
 
@@ -321,6 +322,7 @@ internal class InputReaderTest {
         every { inputReader.updateEvent() } returns Unit
         inputReader.updateEventWrapper()
         verify(exactly = 1)  { mockPrintHelper.printUpdateMode() }
+        verify(exactly = 1)  { mockPrintHelper.eventFormat() }
         verify(exactly = 1)  { inputReader.updateEvent() }
     }
 
@@ -329,6 +331,7 @@ internal class InputReaderTest {
         every { inputReader.deleteEvent() } returns Unit
         inputReader.deleteEventWrapper()
         verify(exactly = 1)  { mockPrintHelper.printDeleteMode() }
+        verify(exactly = 1)  { mockPrintHelper.deleteFormat() }
         verify(exactly = 1)  { inputReader.deleteEvent() }
     }
 
@@ -337,6 +340,7 @@ internal class InputReaderTest {
         every { inputReader.getStatus() } returns Unit
         inputReader.getStatusWrapper()
         verify(exactly = 1)  { mockPrintHelper.printGetStatusMode() }
+        verify(exactly = 1)  { mockPrintHelper.timestampFormat() }
         verify(exactly = 1)  { inputReader.getStatus() }
     }
 

@@ -77,11 +77,19 @@ object PrintHelper {
 
     fun printHelp() = println(helpMessage)
 
-    fun invalidEventInput() = println("Invalid event input")
+    fun invalidEventInput() = println("Invalid event input, format should be:")
 
-    fun invalidDateInput() = println("Invalid date-time input - format should be yyyy-MM-ddTHH:mm:ss")
+    fun invalidDeleteInput() = println("Invalid delete input, format should be:")
+
+    fun invalidDateInput() = println("Invalid date-time input, format should be:")
 
     fun invalidNumber() = println("Invalid number input")
+
+    fun eventFormat() = println("\$plane-id \$model \$origin \$destination \$event-type \$timestamp \$fuel-delta")
+
+    fun deleteFormat() = println("\$plane-id \$timestamp")
+
+    fun timestampFormat() = println("yyyy-MM-ddTHH:mm:ss")
 
     fun printBye() = println("... bye bye! ...")
 
