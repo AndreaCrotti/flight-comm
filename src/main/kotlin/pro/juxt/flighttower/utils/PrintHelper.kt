@@ -54,6 +54,14 @@ object PrintHelper {
         println("====")
     }
 
+    fun printReadMode() = println("Input new Flight Event :")
+
+    fun printUpdateMode() = println("Update Flight Event :")
+
+    fun printDeleteMode() = println("Delete Flight Event :")
+
+    fun printGetStatusMode() = println("Get Flight Status at :")
+
     private val helpMessage = """
         Help Options:
         Type any of the following commands, at any time...

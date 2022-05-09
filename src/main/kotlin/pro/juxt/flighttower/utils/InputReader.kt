@@ -22,10 +22,10 @@ class InputReader(
     fun setInputMode() {
         printHelper.printModeSelection()
         when (readln()) {
-            "1" -> readEvent()
-            "2" -> updateEvent()
-            "3" -> deleteEvent()
-            "4" -> getStatus()
+            "1" -> readEventWrapper()
+            "2" -> updateEventWrapper()
+            "3" -> deleteEventWrapper()
+            "4" -> getStatusWrapper()
             else -> {
                 println("input not recognised.")
                 setInputMode()
@@ -43,6 +43,27 @@ class InputReader(
             }
         }
     }
+
+    fun readEventWrapper() {
+        printHelper.printReadMode()
+        readEvent()
+    }
+
+    fun updateEventWrapper() {
+        printHelper.printUpdateMode()
+        updateEvent()
+    }
+
+    fun deleteEventWrapper() {
+        printHelper.printDeleteMode()
+        deleteEvent()
+    }
+
+    fun getStatusWrapper() {
+        printHelper.printGetStatusMode()
+        getStatus()
+    }
+
 
     fun readEvent() {
         catchErrors {

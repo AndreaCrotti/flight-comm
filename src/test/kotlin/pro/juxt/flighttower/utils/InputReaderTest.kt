@@ -25,20 +25,11 @@ private const val EXIT = "exit"
 internal class InputReaderTest {
 
     private val mockEventService = mockk<FlightEventService>()
-    private val mockPrintHelper = mockk<PrintHelper>()
+    private val mockPrintHelper = mockk<PrintHelper>(relaxUnitFun = true)
     private val inputReader = spyk<InputReader>(InputReader(mockPrintHelper, mockEventService))
 
     @BeforeEach
     fun setup() {
-        every { mockPrintHelper.printWelcome() } returns Unit
-        every { mockPrintHelper.printModeSelection() } returns Unit
-        every { mockPrintHelper.printUpdateSuccess(1) } returns Unit
-        every { mockPrintHelper.printUpdateNotSuccess() } returns Unit
-        every { mockPrintHelper.printEventSaved() } returns Unit
-        every { mockPrintHelper.printErrorConnectingToDb() } returns Unit
-        every { mockPrintHelper.printDelete(1) } returns Unit
-        every { mockPrintHelper.printDeleteUnsuccessful() } returns Unit
-        every { mockPrintHelper.printHelp() } returns Unit
         // stop recursion running infinitely
         every { inputReader.runAgain(any()) } returns Unit
     }
@@ -68,25 +59,25 @@ internal class InputReaderTest {
     @Test
     fun set_input_mode_1_to_read_new_event() {
         stdin("1")
-        every { inputReader.readEvent() } returns Unit
+        every { inputReader.readEventWrapper() } returns Unit
         inputReader.setInputMode()
-        verify(exactly = 1) { inputReader.readEvent() }
+        verify(exactly = 1) { inputReader.readEventWrapper() }
     }
 
     @Test
     fun set_input_mode_2_to_update_event() {
         stdin("2")
-        every { inputReader.updateEvent() } returns Unit
+        every { inputReader.updateEventWrapper() } returns Unit
         inputReader.setInputMode()
-        verify(exactly = 1) { inputReader.updateEvent() }
+        verify(exactly = 1) { inputReader.updateEventWrapper() }
     }
 
     @Test
     fun set_input_mode_3_to_delete_event() {
         stdin("3")
-        every { inputReader.deleteEvent() } returns Unit
+        every { inputReader.deleteEventWrapper() } returns Unit
         inputReader.setInputMode()
-        verify(exactly = 1) { inputReader.deleteEvent() }
+        verify(exactly = 1) { inputReader.deleteEventWrapper() }
     }
 
     @Test
@@ -311,6 +302,38 @@ internal class InputReaderTest {
         every { inputReader.setInputMode() } returns Unit
         inputReader.deleteEvent()
         verify(exactly = 1) { inputReader.setInputMode() }
+    }
+
+    @Test
+    fun read_event_wrapper_prints_then_calls_method() {
+        every { inputReader.readEvent() } returns Unit
+        inputReader.readEventWrapper()
+        verify { mockPrintHelper.printReadMode() }
+        verify { inputReader.readEvent() }
+    }
+
+    @Test
+    fun update_event_wrapper_prints_then_calls_method() {
+        every { inputReader.updateEvent() } returns Unit
+        inputReader.updateEventWrapper()
+        verify { mockPrintHelper.printUpdateMode() }
+        verify { inputReader.updateEvent() }
+    }
+
+    @Test
+    fun delete_event_wrapper_prints_then_calls_method() {
+        every { inputReader.deleteEvent() } returns Unit
+        inputReader.deleteEventWrapper()
+        verify { mockPrintHelper.printDeleteMode() }
+        verify { inputReader.deleteEvent() }
+    }
+
+    @Test
+    fun get_status_wrapper_prints_then_calls_method() {
+        every { inputReader.getStatus() } returns Unit
+        inputReader.getStatusWrapper()
+        verify { mockPrintHelper.printGetStatusMode() }
+        verify { inputReader.getStatus() }
     }
 
     private fun stdin(string: String) {
