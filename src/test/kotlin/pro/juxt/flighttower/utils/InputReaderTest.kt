@@ -6,6 +6,10 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import pro.juxt.flighttower.fixtures.Fixtures.deleteString
 import pro.juxt.flighttower.fixtures.Fixtures.eventString
+import pro.juxt.flighttower.fixtures.Fixtures.eventStringInvalidDate
+import pro.juxt.flighttower.fixtures.Fixtures.eventStringInvalidEvent
+import pro.juxt.flighttower.fixtures.Fixtures.eventStringInvalidNumber
+import pro.juxt.flighttower.fixtures.Fixtures.eventStringInvalidSegments
 import pro.juxt.flighttower.fixtures.Fixtures.getStatusString
 import pro.juxt.flighttower.fixtures.Fixtures.mockDataBaseError
 import pro.juxt.flighttower.fixtures.Fixtures.stubDeleteEvent
@@ -308,32 +312,60 @@ internal class InputReaderTest {
     fun read_event_wrapper_prints_then_calls_method() {
         every { inputReader.readEvent() } returns Unit
         inputReader.readEventWrapper()
-        verify { mockPrintHelper.printReadMode() }
-        verify { inputReader.readEvent() }
+        verify(exactly = 1)  { mockPrintHelper.printReadMode() }
+        verify(exactly = 1)  { inputReader.readEvent() }
     }
 
     @Test
     fun update_event_wrapper_prints_then_calls_method() {
         every { inputReader.updateEvent() } returns Unit
         inputReader.updateEventWrapper()
-        verify { mockPrintHelper.printUpdateMode() }
-        verify { inputReader.updateEvent() }
+        verify(exactly = 1)  { mockPrintHelper.printUpdateMode() }
+        verify(exactly = 1)  { inputReader.updateEvent() }
     }
 
     @Test
     fun delete_event_wrapper_prints_then_calls_method() {
         every { inputReader.deleteEvent() } returns Unit
         inputReader.deleteEventWrapper()
-        verify { mockPrintHelper.printDeleteMode() }
-        verify { inputReader.deleteEvent() }
+        verify(exactly = 1)  { mockPrintHelper.printDeleteMode() }
+        verify(exactly = 1)  { inputReader.deleteEvent() }
     }
 
     @Test
     fun get_status_wrapper_prints_then_calls_method() {
         every { inputReader.getStatus() } returns Unit
         inputReader.getStatusWrapper()
-        verify { mockPrintHelper.printGetStatusMode() }
-        verify { inputReader.getStatus() }
+        verify(exactly = 1)  { mockPrintHelper.printGetStatusMode() }
+        verify(exactly = 1)  { inputReader.getStatus() }
+    }
+
+    @Test
+    fun flight_event_invalid_number() {
+        stdin(eventStringInvalidNumber)
+        inputReader.readEvent()
+        verify(exactly = 1)  { mockPrintHelper.invalidNumber() }
+    }
+
+    @Test
+    fun flight_event_invalid_date_time() {
+        stdin(eventStringInvalidDate)
+        inputReader.readEvent()
+        verify(exactly = 1)  { mockPrintHelper.invalidDateInput() }
+    }
+
+    @Test
+    fun flight_event_invalid_event_type() {
+        stdin(eventStringInvalidEvent)
+        inputReader.readEvent()
+        verify(exactly = 1)  { mockPrintHelper.invalidEventInput() }
+    }
+
+    @Test
+    fun flight_event_invalid_segments() {
+        stdin(eventStringInvalidSegments)
+        inputReader.readEvent()
+        verify(exactly = 1)  { mockPrintHelper.invalidEventInput() }
     }
 
     private fun stdin(string: String) {

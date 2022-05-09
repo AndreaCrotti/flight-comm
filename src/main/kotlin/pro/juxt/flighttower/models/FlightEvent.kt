@@ -1,5 +1,7 @@
 package pro.juxt.flighttower.models
 
+import org.valiktor.functions.isIn
+import org.valiktor.validate
 import java.time.LocalDateTime
 
 data class FlightEvent(
@@ -10,4 +12,10 @@ data class FlightEvent(
     val eventType : String,
     val timestamp: LocalDateTime,
     val fuelDelta : Int
-)
+) {
+    init {
+        validate(this) {
+            validate(FlightEvent::eventType).isIn("Land", "Take-Off", "Re-fuel")
+        }
+    }
+}

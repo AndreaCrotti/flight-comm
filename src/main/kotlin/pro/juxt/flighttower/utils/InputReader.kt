@@ -1,11 +1,13 @@
 package pro.juxt.flighttower.utils
 
 import org.springframework.stereotype.Component
+import org.valiktor.ConstraintViolationException
 import pro.juxt.flighttower.models.DeleteEvent
 import pro.juxt.flighttower.models.FlightEvent
 import pro.juxt.flighttower.models.StatusRequest
 import pro.juxt.flighttower.services.FlightEventService
 import java.time.LocalDateTime
+import java.time.format.DateTimeParseException
 import kotlin.system.exitProcess
 
 @Component
@@ -122,7 +124,15 @@ class InputReader(
     fun catchErrors(function: () -> Unit) {
         try {
             function()
-        } catch (exception : java.lang.Exception) {
+        } catch (numberException : NumberFormatException) {
+            printHelper.invalidNumber()
+        } catch (illegalArgument : IllegalArgumentException) {
+            printHelper.invalidEventInput()
+        } catch (dateTimeException : DateTimeParseException) {
+            printHelper.invalidDateInput()
+        } catch (constraintViolation : ConstraintViolationException) {
+            printHelper.invalidEventInput()
+        } catch (exception : Exception) {
             printHelper.printErrorConnectingToDb()
         }
     }
@@ -134,20 +144,24 @@ class InputReader(
 
     private fun toEvent(input: String) : FlightEvent {
         val segments = input.split(" ")
-        // TODO add validation here on
+        validateEvent(segments, 7)
         return FlightEvent(segments[0], segments[1], segments[2], segments[3],
             segments[4], LocalDateTime.parse(segments[5]), segments[6].toInt())
     }
 
     private fun toDeleteEvent(input: String) : DeleteEvent {
         val segments = input.split(" ")
-        // TODO add validation here
+        validateEvent(segments, 2)
         return DeleteEvent(segments[0], LocalDateTime.parse(segments[1]))
     }
 
     private fun toStatusRequest(input: String) : StatusRequest {
-        // TODO add validation here
         return StatusRequest(LocalDateTime.parse(input))
+    }
+
+    private fun validateEvent(segments: List<String>, size : Int) {
+        if (segments.isEmpty()) throw IllegalArgumentException("invalid event input")
+        if (segments.size != size) throw IllegalArgumentException("invalid event input")
     }
 
 }

@@ -29,10 +29,9 @@
 - print confirmation of insert - x
 - print confirmation of upsert - x
 - make event readers recursive - x
-- help functions
-- switch modes
-- exit
+- help functions - x
+- switch modes - x
+- exit - x
 - print input format for each mode
 - validate input / catch errors
-- global error catcher ?
 - make sure find all results are sorted - x

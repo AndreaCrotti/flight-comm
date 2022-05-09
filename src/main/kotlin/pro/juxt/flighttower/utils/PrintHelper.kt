@@ -8,11 +8,14 @@ object PrintHelper {
 
     private val welcomeMessage = """
         
-        #################################################################################
-        ##                                                                             ##
-        ##  Welcome to the Flight Tower Controller Command Line Interface App v1.8.12  ##
-        ##                                                                             ##
-        #################################################################################
+        #########################################################
+        ##                                                     ##
+        ##           *** Welcome to Flight Comm ***            ## 
+        ##                                                     ## 
+        ##    The Flight Controller Command Line Interface     ##
+        ##                      v1.8.12                        ##
+        ##                                                     ##
+        #########################################################
         
     """.trimIndent()
 
@@ -60,7 +63,7 @@ object PrintHelper {
 
     fun printDeleteMode() = println("Delete Flight Event :")
 
-    fun printGetStatusMode() = println("Get Flight Status at :")
+    fun printGetStatusMode() = println("Get Flight Status (enter time in format yyyy-MM-ddTHH:mm:ss) :")
 
     private val helpMessage = """
         Help Options:
@@ -74,6 +77,12 @@ object PrintHelper {
 
     fun printHelp() = println(helpMessage)
 
-    fun printBye() = println("... goodbye ...")
+    fun invalidEventInput() = println("Invalid event input")
+
+    fun invalidDateInput() = println("Invalid date-time input - format should be yyyy-MM-ddTHH:mm:ss")
+
+    fun invalidNumber() = println("Invalid number input")
+
+    fun printBye() = println("... bye bye! ...")
 
 }
