@@ -24,7 +24,7 @@ class InputReader(
             "1" -> readEvent()
             "2" -> updateEvent()
             "3" -> deleteEvent()
-            "4" -> TODO("handle get info" )
+            "4" -> getStatus()
             else -> {
                 println("input not recognised.")
                 setInputMode()
@@ -41,6 +41,7 @@ class InputReader(
         } catch (exception : java.lang.Exception) {
             printHelper.printErrorConnectingToDb()
         }
+        runAgain { readEvent() }
     }
 
     fun updateEvent() {
@@ -55,6 +56,7 @@ class InputReader(
         } catch (exception : java.lang.Exception) {
             printHelper.printErrorConnectingToDb()
         }
+        runAgain { updateEvent() }
     }
 
     fun deleteEvent() {
@@ -66,6 +68,7 @@ class InputReader(
         } catch (exception : java.lang.Exception) {
             printHelper.printErrorConnectingToDb()
         }
+        runAgain { deleteEvent() }
     }
 
     fun getStatus() {
@@ -76,6 +79,11 @@ class InputReader(
         } catch (exception : java.lang.Exception) {
             printHelper.printErrorConnectingToDb()
         }
+        runAgain { getStatus() }
+    }
+
+    fun runAgain(function: () -> Unit ) {
+        function()
     }
 
     private fun toEvent(input: String) : FlightEvent {

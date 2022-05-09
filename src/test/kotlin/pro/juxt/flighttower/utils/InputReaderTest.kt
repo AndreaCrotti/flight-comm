@@ -34,6 +34,8 @@ internal class InputReaderTest {
         every { mockPrintHelper.printErrorConnectingToDb() } returns Unit
         every { mockPrintHelper.printDelete(1) } returns Unit
         every { mockPrintHelper.printDeleteUnsuccessful() } returns Unit
+        // stop recursion running infinitely
+        every { inputReader.runAgain(any()) } returns Unit
     }
 
     @Test
@@ -197,6 +199,47 @@ internal class InputReaderTest {
         every { mockEventService.getStatusAt(stubStatusRequest) } returns stubFlightsStatusSet
         inputReader.getStatus()
         verify { mockPrintHelper.printStatus(stubFlightsStatusSet) }
+    }
+
+    @Test
+    fun get_status_prints_error_on_exception() {
+        stdin(getStatusString)
+        every { mockEventService.getStatusAt(stubStatusRequest) } throws mockDataBaseError
+        inputReader.getStatus()
+        verify { mockPrintHelper.printErrorConnectingToDb() }
+    }
+
+    @Test
+    fun read_event_works_recursively() {
+        stdin(eventString)
+        every { mockEventService.recordNewEvent(stubEvent()) } returns true
+        inputReader.readEvent()
+        verify(exactly = 1) { inputReader.runAgain(any()) }
+    }
+
+    @Test
+    fun update_event_works_recursively() {
+        stdin(eventString)
+        every { mockEventService.updateEvent(stubEvent()) } returns
+                UpdateResult.acknowledged(0, 1, null)
+        inputReader.updateEvent()
+        verify(exactly = 1) { inputReader.runAgain(any()) }
+    }
+
+    @Test
+    fun delete_event_works_recursively() {
+        stdin(deleteString)
+        every { mockEventService.deleteEvent(stubDeleteEvent) } returns 1
+        inputReader.deleteEvent()
+        verify(exactly = 1) { inputReader.runAgain(any()) }
+    }
+
+    @Test
+    fun get_status_works_recursively() {
+        stdin(getStatusString)
+        every { mockEventService.getStatusAt(stubStatusRequest) } returns listOf(stubFlightStatus)
+        inputReader.getStatus()
+        verify(exactly = 1) { inputReader.runAgain(any()) }
     }
 
     private fun stdin(string: String) {
