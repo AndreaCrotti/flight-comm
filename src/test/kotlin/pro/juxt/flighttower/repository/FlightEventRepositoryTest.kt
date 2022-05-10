@@ -13,6 +13,7 @@ import pro.juxt.flighttower.fixtures.Fixtures.stubDeleteEvent
 import pro.juxt.flighttower.fixtures.Fixtures.stubEvent
 import pro.juxt.flighttower.fixtures.Fixtures.stubEvent1
 import pro.juxt.flighttower.fixtures.Fixtures.stubEvent2
+import pro.juxt.flighttower.fixtures.Fixtures.stubEvent3
 import pro.juxt.flighttower.fixtures.Fixtures.stubEvent4
 import pro.juxt.flighttower.fixtures.Fixtures.stubEvent5
 import pro.juxt.flighttower.fixtures.Fixtures.stubEvent7
@@ -34,16 +35,27 @@ class FlightEventRepositoryTest @Autowired constructor (
     }
 
     @Test
-    fun repository_saves_flight_event() {
-        flightEventRepository.save(stubFlightEvent)
+    fun upsert_saves_flight_event_if_not_already_there() {
+        flightEventRepository.upsert(stubFlightEvent)
         val database : List<FlightEvent> = flightEventRepository.findAll()
+
         assertEquals(1, database.size)
         assertEquals(stubFlightEvent, database.first())
+    }
+    @Test
+    fun upsert_saves_multiple_flight_events() {
+        flightEventRepository.upsert(stubEvent1)
+        flightEventRepository.upsert(stubEvent2)
+        flightEventRepository.upsert(stubEvent3)
+        val database : List<FlightEvent> = flightEventRepository.findAll()
+
+        assertEquals(3, database.size)
+        assertTrue(database.containsAll(listOf(stubEvent1, stubEvent2, stubEvent3)))
     }
 
     @Test
     fun upsert_updates_existing_flight_event() {
-        flightEventRepository.save(stubFlightEvent)
+        flightEventRepository.upsert(stubFlightEvent)
 
         val updatedEvent = stubEvent(fuelDelta = 300)
         flightEventRepository.upsert(updatedEvent)
@@ -54,7 +66,9 @@ class FlightEventRepositoryTest @Autowired constructor (
     }
 
     @Test
-    fun upsert_inserts_new_event_if_not_found() {
+    fun upsert_always_overwrites_existing_flight_events() {
+        flightEventRepository.upsert(stubFlightEvent)
+        flightEventRepository.upsert(stubFlightEvent)
         flightEventRepository.upsert(stubFlightEvent)
         val database : List<FlightEvent> = flightEventRepository.findAll()
 

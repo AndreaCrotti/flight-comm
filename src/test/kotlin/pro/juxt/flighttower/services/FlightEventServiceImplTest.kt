@@ -6,7 +6,6 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import pro.juxt.flighttower.fixtures.Fixtures.mockDataBaseError
 import pro.juxt.flighttower.fixtures.Fixtures.stubDataSet
 import pro.juxt.flighttower.fixtures.Fixtures.stubDateTime
 import pro.juxt.flighttower.fixtures.Fixtures.stubDeleteEvent
@@ -31,16 +30,19 @@ internal class FlightEventServiceImplTest {
 
     @Test
     fun record_new_event_saves_to_repository() {
-        every { mockRepository.save(stubFlightEvent) } returns stubFlightEvent
+        every { mockRepository.upsert(stubFlightEvent) } returns
+                UpdateResult.acknowledged(1, 1, null)
         flightEventService.recordNewEvent(stubFlightEvent)
-        verify(exactly = 1) { mockRepository.save(stubFlightEvent) }
+        verify(exactly = 1) { mockRepository.upsert(stubFlightEvent) }
     }
 
     @Test
     fun record_new_event_returns_true_on_save() {
-        every { mockRepository.save(stubFlightEvent) } returns stubFlightEvent
+        every { mockRepository.upsert(stubFlightEvent) } returns
+                UpdateResult.acknowledged(1, 1, null)
         assertTrue( flightEventService.recordNewEvent(stubFlightEvent) )
     }
+
 
     @Test
     fun update_event_updates_repository() {
@@ -121,7 +123,7 @@ internal class FlightEventServiceImplTest {
     }
 
     /**
-     * Non-Production - only lightly tested as this is non-production code, only available in Dev-Mode
+     * Non-Production - only lightly tested as this is not production code, only available in Dev-Mode
      */
     @Test
     fun run_dev_data() {

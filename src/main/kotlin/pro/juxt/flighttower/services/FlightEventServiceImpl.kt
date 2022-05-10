@@ -13,8 +13,7 @@ import pro.juxt.flighttower.utils.DevData
 class FlightEventServiceImpl(private val flightEventRepository: FlightEventRepository) : FlightEventService {
 
     override fun recordNewEvent(flightEvent: FlightEvent) : Boolean {
-        val savedEvent = flightEventRepository.save(flightEvent)
-        return flightEvent == savedEvent
+        return flightEventRepository.upsert(flightEvent).wasAcknowledged()
     }
 
     override fun updateEvent(flightEvent: FlightEvent) : UpdateResult {
@@ -39,7 +38,7 @@ class FlightEventServiceImpl(private val flightEventRepository: FlightEventRepos
     }
 
     override fun runDevData() {
-        DevData.stubDataSet.forEach { flightEventRepository.upsert(it) }
+        DevData.devDataSet.forEach { flightEventRepository.upsert(it) }
     }
 
     private fun getStatus(eventType : String) : String {

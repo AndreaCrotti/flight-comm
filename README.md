@@ -60,6 +60,9 @@ For example:
 F222 747 DUBLIN LONDON Re-Fuel 2021-03-29T10:00:00 200
 ```
 
+__Note:__ If there is already an existing flight event for the given `plane-id`
+and `$timestamp`, it will be overwritten.
+
 ### 2. Update Flight Event
 
 This allows for updating of existing flight events. Updates follow the same format as the 
@@ -69,8 +72,8 @@ new flight events, above.
 $plane-id $model $origin $destination $event-type $timestamp $fuel-delta
 ```
 
-__Note:__ If an existing flight event is not found for your update request, 
-a new event will be created.
+__Note:__ If an existing flight event is not found for the given 
+`plane-id` and `$timestamp`, a new event will be created.
 
 ### 3. Delete Flight Event
 
@@ -81,8 +84,7 @@ $plane-id $timestamp
 ```
 
 This will remove any flight events for the given `plane-id` at the given `timestamp`.
-If no matching flight event is found, nothing is deleted. If multiple matching flight events 
-are found, they will all be deleted.
+If no matching flight event is found, nothing is deleted.
 
 ### 4. Get Flight Status
 
@@ -96,10 +98,23 @@ Get Flight Status - enter timestamp in format :
 yyyy-MM-ddTHH:mm:ss
 2022-05-09T22:00:00
 ====
-F551 Landed -300
-F324 In-Flight 0
-F123 In-Flight 0
-F222 Awaiting-Takeoff 400
+F101 In-Flight 500
+F102 Landed 300
+F103 Landed 225
 ====
 ```
 
+### 5. Run test data
+
+__*\*Only available in Dev Mode*__ - This allows uploading of some basic 
+test data to assist in testing & development. It uploads data for 3 flights, 
+with 3 events each (9 events in total).
+
+The flights are:
+
+- F101 from London to Miami
+- F102 from Reykjavik to Amsterdam
+- F103 from Lisbon to Sydney
+
+Full details of the events can be found 
+in `src/main/kotlin/pro/juxt/flighttower/utils/DevData.kt`
