@@ -24,12 +24,13 @@ object PrintHelper {
     }
 
     private val selectInputMode = """
-        Select input mode mode:
+        Select input mode:
         1 : Input new Flight Event
         2 : Update Flight Event
         3 : Delete Flight Event
         4 : Get Flight Status
-        (enter: 1, 2, 3 or 4)
+        5 : (Dev mode) Run test data
+        (enter: 1, 2, 3, 4 or 5)
     """.trimIndent()
 
     fun printModeSelection() {
@@ -63,7 +64,7 @@ object PrintHelper {
 
     fun printDeleteMode() = println("Delete Flight Event :")
 
-    fun printGetStatusMode() = println("Get Flight Status (enter time in format yyyy-MM-ddTHH:mm:ss) :")
+    fun printGetStatusMode() = println("Get Flight Status - enter timestamp in format :")
 
     private val helpMessage = """
         Help Options:
@@ -91,6 +92,6 @@ object PrintHelper {
 
     fun timestampFormat() = println("yyyy-MM-ddTHH:mm:ss")
 
-    fun printBye() = println("... bye bye! ...")
+    fun printBye() = println("... bye! ...")
 
 }

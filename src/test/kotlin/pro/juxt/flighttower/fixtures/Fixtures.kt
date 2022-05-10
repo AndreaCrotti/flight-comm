@@ -23,6 +23,7 @@ object Fixtures {
     const val eventStringInvalidNumber = "F123 747 PARIS BERLIN Land 2022-05-04T13:30:00 xx"
     const val eventStringInvalidEvent = "F123 747 PARIS BERLIN Nothing 2022-05-04T13:30:00 150"
     const val eventStringInvalidSegments = "F123 747 PARIS BERLIN 2022-05-04T13:30:00 150"
+    const val deleteStringInvalid = "F123 2022-05-04T13:30:00 123"
 
     /**
         Flight from London to Miami - End Status : Take-Off , Fuel 500

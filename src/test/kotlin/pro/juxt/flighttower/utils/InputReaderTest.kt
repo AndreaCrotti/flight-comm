@@ -5,6 +5,7 @@ import io.mockk.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import pro.juxt.flighttower.fixtures.Fixtures.deleteString
+import pro.juxt.flighttower.fixtures.Fixtures.deleteStringInvalid
 import pro.juxt.flighttower.fixtures.Fixtures.eventString
 import pro.juxt.flighttower.fixtures.Fixtures.eventStringInvalidDate
 import pro.juxt.flighttower.fixtures.Fixtures.eventStringInvalidEvent
@@ -356,6 +357,7 @@ internal class InputReaderTest {
         stdin(eventStringInvalidDate)
         inputReader.readEvent()
         verify(exactly = 1)  { mockPrintHelper.invalidDateInput() }
+        verify(exactly = 1)  { mockPrintHelper.timestampFormat() }
     }
 
     @Test
@@ -363,6 +365,7 @@ internal class InputReaderTest {
         stdin(eventStringInvalidEvent)
         inputReader.readEvent()
         verify(exactly = 1)  { mockPrintHelper.invalidEventInput() }
+        verify(exactly = 1)  { mockPrintHelper.eventFormat() }
     }
 
     @Test
@@ -370,6 +373,15 @@ internal class InputReaderTest {
         stdin(eventStringInvalidSegments)
         inputReader.readEvent()
         verify(exactly = 1)  { mockPrintHelper.invalidEventInput() }
+        verify(exactly = 1)  { mockPrintHelper.eventFormat() }
+    }
+
+    @Test
+    fun delete_request_invalid() {
+        stdin(deleteStringInvalid)
+        inputReader.deleteEvent()
+        verify(exactly = 1)  { mockPrintHelper.invalidDeleteInput() }
+        verify(exactly = 1)  { mockPrintHelper.deleteFormat() }
     }
 
     private fun stdin(string: String) {

@@ -15,7 +15,7 @@ data class FlightEvent(
 ) {
     init {
         validate(this) {
-            validate(FlightEvent::eventType).isIn("Land", "Take-Off", "Re-fuel")
+            validate(FlightEvent::eventType).isIn("Land", "Take-Off", "Re-Fuel")
         }
     }
 }
