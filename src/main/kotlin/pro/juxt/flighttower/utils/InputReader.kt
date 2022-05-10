@@ -18,6 +18,7 @@ class InputReader(
 
     fun startUp() {
         printHelper.printWelcome()
+        printHelper.printHelp()
         setInputMode()
     }
 
@@ -28,6 +29,12 @@ class InputReader(
             "2" -> updateEventWrapper()
             "3" -> deleteEventWrapper()
             "4" -> getStatusWrapper()
+            "5" -> runDevData()
+            "exit" -> exitSystem()
+            "help" -> {
+                printHelper.printHelp()
+                setInputMode()
+            }
             else -> {
                 println("input not recognised.")
                 setInputMode()
@@ -159,6 +166,14 @@ class InputReader(
     fun exitSystem() {
         printHelper.printBye()
         exitProcess(0)
+    }
+
+    fun runDevData() {
+        catchErrors {
+            flightEventService.runDevData()
+            printHelper.devDataUploaded()
+        }
+        setInputMode()
     }
 
     private fun toEvent(input: String) : FlightEvent {

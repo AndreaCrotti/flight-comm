@@ -120,4 +120,15 @@ internal class FlightEventServiceImplTest {
         assertEquals(expectedStatus, result)
     }
 
+    /**
+     * Non-Production - only lightly tested as this is non-production code, only available in Dev-Mode
+     */
+    @Test
+    fun run_dev_data() {
+        every { mockRepository.upsert(any()) } returns
+                UpdateResult.acknowledged(1, 1, null)
+        flightEventService.runDevData()
+        verify(exactly = 9) { mockRepository.upsert(any()) }
+    }
+
 }

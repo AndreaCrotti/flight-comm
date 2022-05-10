@@ -92,6 +92,14 @@ object PrintHelper {
 
     fun timestampFormat() = println("yyyy-MM-ddTHH:mm:ss")
 
-    fun printBye() = println("... bye! ...")
+    private val devDataUploaded = """
+        
+        *** Dev Data successfully uploaded ***
+        
+    """.trimIndent()
+
+    fun devDataUploaded() = println(devDataUploaded)
+
+    fun printBye() = println("\n... bye! ...")
 
 }

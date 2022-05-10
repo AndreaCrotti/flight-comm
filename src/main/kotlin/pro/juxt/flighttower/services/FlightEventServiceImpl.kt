@@ -7,6 +7,7 @@ import pro.juxt.flighttower.repository.FlightEventRepository
 import pro.juxt.flighttower.models.FlightEvent
 import pro.juxt.flighttower.models.FlightStatus
 import pro.juxt.flighttower.models.StatusRequest
+import pro.juxt.flighttower.utils.DevData
 
 @Service
 class FlightEventServiceImpl(private val flightEventRepository: FlightEventRepository) : FlightEventService {
@@ -35,6 +36,10 @@ class FlightEventServiceImpl(private val flightEventRepository: FlightEventRepos
             }
         }
         return talliedEvents.map { FlightStatus(it.key, getStatus(it.value.first), it.value.second) }
+    }
+
+    override fun runDevData() {
+        DevData.stubDataSet.forEach { flightEventRepository.upsert(it) }
     }
 
     private fun getStatus(eventType : String) : String {

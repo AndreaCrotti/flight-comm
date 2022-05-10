@@ -15,5 +15,6 @@ interface FlightEventService {
     fun deleteEvent(deleteEvent: DeleteEvent) : Long
 
     fun getStatusAt(statusRequest: StatusRequest) : List<FlightStatus>
+    fun runDevData()
 
 }

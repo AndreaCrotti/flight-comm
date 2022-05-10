@@ -79,9 +79,9 @@ object Fixtures {
 
     val stubFlightStatus = FlightStatus("F123", "In-Flight", 500)
 
-    val stubFlightStatus1 = FlightStatus("F101", "In-Flight", 500)
-    val stubFlightStatus2 = FlightStatus("F102", "Landed", 300)
-    val stubFlightStatus3 = FlightStatus("F103", "Awaiting-Takeoff", 225)
+    private val stubFlightStatus1 = FlightStatus("F101", "In-Flight", 500)
+    private val stubFlightStatus2 = FlightStatus("F102", "Landed", 300)
+    private val stubFlightStatus3 = FlightStatus("F103", "Awaiting-Takeoff", 225)
 
     val stubFlightsStatusSet = listOf(stubFlightStatus1, stubFlightStatus2, stubFlightStatus3)
 

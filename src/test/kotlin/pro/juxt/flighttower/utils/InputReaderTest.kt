@@ -56,7 +56,7 @@ internal class InputReaderTest {
     @Test
     fun set_input_mode_prints_options() {
         stdin("1")
-        every { inputReader.readEvent() } returns Unit
+        every { inputReader.readEventWrapper() } returns Unit
         inputReader.setInputMode()
         verify(exactly = 1) { mockPrintHelper.printModeSelection() }
     }
@@ -83,6 +83,30 @@ internal class InputReaderTest {
         every { inputReader.deleteEventWrapper() } returns Unit
         inputReader.setInputMode()
         verify(exactly = 1) { inputReader.deleteEventWrapper() }
+    }
+
+    @Test
+    fun set_input_mode_4_to_get_status() {
+        stdin("4")
+        every { inputReader.getStatusWrapper() } returns Unit
+        inputReader.setInputMode()
+        verify(exactly = 1) { inputReader.getStatusWrapper() }
+    }
+
+    @Test
+    fun set_input_mode_5_to_load_dev_data() {
+        stdin("5")
+        every { inputReader.runDevData() } returns Unit
+        inputReader.setInputMode()
+        verify(exactly = 1) { inputReader.runDevData() }
+    }
+
+    @Test
+    fun set_input_mode_is_exitable() {
+        stdin("exit")
+        every { inputReader.exitSystem() } returns Unit
+        inputReader.setInputMode()
+        verify(exactly = 1) { inputReader.exitSystem() }
     }
 
     @Test
@@ -382,6 +406,19 @@ internal class InputReaderTest {
         inputReader.deleteEvent()
         verify(exactly = 1)  { mockPrintHelper.invalidDeleteInput() }
         verify(exactly = 1)  { mockPrintHelper.deleteFormat() }
+    }
+
+    /**
+     * Non-Production - only lightly tested as this is non-production code, only available in Dev-Mode
+     */
+    @Test
+    fun loads_dev_data() {
+        every { mockEventService.runDevData() } returns Unit
+        every { inputReader.setInputMode() } returns Unit
+        inputReader.runDevData()
+        verify(exactly = 1)  { mockEventService.runDevData() }
+        verify(exactly = 1)  { mockPrintHelper.devDataUploaded() }
+        verify(exactly = 1)  { inputReader.setInputMode() }
     }
 
     private fun stdin(string: String) {
